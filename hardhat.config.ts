@@ -1,5 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import "hardhat-deploy";
 import "dotenv/config";
 
 /** @type import('hardhat/config').HardhatUserConfig */
@@ -13,14 +14,28 @@ const config: HardhatUserConfig = {
   solidity: "0.8.19",
   defaultNetwork: "hardhat",
   networks: {
-    hardhat: {},
+    hardhat: {
+      chainId: 1337,
+      saveDeployments: true,
+    },
+    hardatLocal: {
+      url: "http://127.0.0.1:8545/",
+      chainId: 1337,      
+    },
     sepolia: {
       url: RPC_ENDPOINT_SEPOLIA_NETWORK,
       accounts: [PRIVATE_KEY_ACCOUNT_SEPOLIA],
+      saveDeployments: true,
+      chainId: 11155111,
     },
   },
   etherscan: {
     apiKey: API_KEY_ETHERSCAN,
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
   },
 };
 
