@@ -4,17 +4,11 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
 
 ## Project Structure
 
-- `contracts/`: Contains the original challenge contracts and solution implementations
-  - `level-03-coin-flip/`: CoinFlip challenge and solution
-    - `CoinFlip.sol`: Original vulnerable contract
-    - `solution/CoinFlipGues.sol`: Solution contract that exploits the vulnerability
-- `deploy/`: Contains deployment scripts using hardhat-deploy
-  - `30-deploy-coin-flip.ts`: Deploys the CoinFlip contract
-  - `31-deploy-coin-flip-solution.ts`: Deploys the GuessCoinFlip solution contract
+- `contracts/`: Contains the original challenge contracts and solution implementations organized by level
+- `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
 - `scripts/`: Contains scripts for interacting with deployed contracts
-  - `execute-coin-flip-guess.ts`: Calls the `getCoinFlip` method on the deployed solution contract
-- `docs/`: Contains detailed documentation for each challenge
-  - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
+- `docs/`: Contains detailed documentation for each challenge with explanations and solution guides
+- `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
 
