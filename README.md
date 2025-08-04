@@ -8,11 +8,13 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-03-coin-flip/`: CoinFlip challenge and solution
     - `CoinFlip.sol`: Original vulnerable contract
     - `solution/CoinFlipGues.sol`: Solution contract that exploits the vulnerability
-
-## Available Scripts
-
-- `deploy-CoinFlipGues.ts`: Deploys the CoinFlip solution contract
-- `call-CoinFlipGues.ts`: Calls the `getCoinFlip` method on the deployed solution contract
+- `deploy/`: Contains deployment scripts using hardhat-deploy
+  - `30-deploy-coin-flip.ts`: Deploys the CoinFlip contract
+  - `31-deploy-coin-flip-solution.ts`: Deploys the GuessCoinFlip solution contract
+- `scripts/`: Contains scripts for interacting with deployed contracts
+  - `execute-coin-flip-guess.ts`: Calls the `getCoinFlip` method on the deployed solution contract
+- `docs/`: Contains detailed documentation for each challenge
+  - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
 
 ## Getting Started
 
@@ -41,19 +43,38 @@ COIN_MARKET_CAP_API_KEY=your_coinmarketcap_api_key
 
 ## Usage
 
-### Deploy the CoinFlip Solution Contract
+### Deploy the Contracts
+
+Deploy both the CoinFlip contract and the solution contract:
 
 ```shell
-npx hardhat run scripts/deploy-CoinFlipGues.ts --network sepolia
+# Deploy all contracts
+npx hardhat deploy --network sepolia
+
+# Or deploy specific contracts by tags
+npx hardhat deploy --tags coin-flip --network sepolia
+npx hardhat deploy --tags coin-flip-solution --network sepolia
 ```
 
-### Call the getCoinFlip Method
+### Execute the Solution
+
+Call the `getCoinFlip` method on the deployed solution contract:
 
 ```shell
-npx hardhat run scripts/call-CoinFlipGues.ts --network sepolia
+# Using default address
+npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+
+# Or specifying a custom address
+CONTRACT_ADDRESS=0xYourContractAddress npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
 ```
 
-## CoinFlip Challenge Explanation
+## Challenge Documentation
+
+Detailed documentation for each challenge is available in the `docs/` directory:
+
+- [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
+
+## CoinFlip Challenge Summary
 
 The CoinFlip challenge requires predicting the outcome of a coin flip 10 times in a row. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
 
