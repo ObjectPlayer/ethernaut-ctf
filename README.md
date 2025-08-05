@@ -6,7 +6,11 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
 
 - `contracts/`: Contains the original challenge contracts and solution implementations organized by level
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
-- `scripts/`: Contains scripts for interacting with deployed contracts
+- `scripts/`: Contains scripts for interacting with deployed contracts and utilities
+  - `execute-coin-flip-guess.ts`: Executes the solution for the CoinFlip challenge
+  - `verify.ts`: Utility for manually verifying contracts on block explorers
+- `utils/`: Contains utility functions and configurations
+  - `network-config.ts`: Network configuration for automatic contract verification
 - `docs/`: Contains detailed documentation for each challenge with explanations and solution guides
 - `test/`: Contains test suites for verifying contract functionality
 
@@ -50,7 +54,7 @@ npx hardhat deploy --tags coin-flip --network sepolia
 npx hardhat deploy --tags coin-flip-solution --network sepolia
 ```
 
-Contracts will be automatically verified on Etherscan when deployed to non-local networks like Sepolia.
+Contracts will be automatically verified on Etherscan when deployed to non-local networks like Sepolia. The system uses the network configuration in `utils/network-config.ts` to determine which networks should trigger verification.
 
 ### Execute the Solution
 
@@ -75,6 +79,8 @@ npx hardhat run scripts/verify.ts --network sepolia -- --address 0xYourContractA
 # Verify a contract with constructor arguments
 npx hardhat run scripts/verify.ts --network sepolia -- --address 0xYourContractAddress --constructor-args arg1,arg2
 ```
+
+The verification system supports multiple networks and will automatically detect if verification is appropriate based on the network's chain ID.
 
 ## Challenge Documentation
 
