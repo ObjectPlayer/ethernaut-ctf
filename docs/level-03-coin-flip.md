@@ -86,17 +86,21 @@ npx hardhat deploy --tags coin-flip-solution --network sepolia
 
 ### 3. Execute the Solution
 
-Call the `getCoinFlip()` function 10 times to win the challenge:
+Call the `getCoinFlip()` function 10 times to win the challenge. You can use the Hardhat console to interact with the contract:
 
 ```shell
-# Using the default address
-npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+# Start the Hardhat console
+npx hardhat console --network sepolia
 
-# Or specifying a custom address
-CONTRACT_ADDRESS=0xYourContractAddress npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+# Then in the console:
+const GuessCoinFlip = await ethers.getContractFactory("GuessCoinFlip")
+const guessCoinFlip = await GuessCoinFlip.attach("0xYourContractAddress")
+const tx = await guessCoinFlip.getCoinFlip()
+const receipt = await tx.wait()
+console.log("Transaction successful:", receipt.hash)
 ```
 
-**Note**: You need to call this function 10 times, but you must wait for a new block between each call. In Ethereum mainnet or testnets like Sepolia, this happens naturally as blocks are mined approximately every 12-15 seconds.
+**Note**: You need to call this function 10 times, but you must wait for a new block between each call. In Ethereum mainnet or testnets like Sepolia, this happens naturally as blocks are mined approximately every 12-15 seconds. You can run the above code in the console multiple times (waiting between calls) until you reach 10 consecutive wins.
 
 ### 4. Verify Your Success
 

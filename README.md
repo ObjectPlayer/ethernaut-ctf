@@ -58,15 +58,21 @@ Contracts will be automatically verified on Etherscan when deployed to non-local
 
 ### Execute the Solution
 
-Call the `getCoinFlip` method on the deployed solution contract:
+To execute the solution, you'll need to interact with the deployed GuessCoinFlip contract. You can do this through:
 
 ```shell
-# Using default address
-npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+# Using hardhat console
+npx hardhat console --network sepolia
 
-# Or specifying a custom address
-CONTRACT_ADDRESS=0xYourContractAddress npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+# Then in the console:
+const GuessCoinFlip = await ethers.getContractFactory("GuessCoinFlip")
+const guessCoinFlip = await GuessCoinFlip.attach("0xYourContractAddress")
+const tx = await guessCoinFlip.getCoinFlip()
+const receipt = await tx.wait()
+console.log("Transaction successful:", receipt.hash)
 ```
+
+You'll need to execute this multiple times (waiting for a new block each time) to achieve 10 consecutive wins.
 
 ### Manually Verify Contracts
 
