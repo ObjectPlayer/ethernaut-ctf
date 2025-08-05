@@ -50,6 +50,8 @@ npx hardhat deploy --tags coin-flip --network sepolia
 npx hardhat deploy --tags coin-flip-solution --network sepolia
 ```
 
+Contracts will be automatically verified on Etherscan when deployed to non-local networks like Sepolia.
+
 ### Execute the Solution
 
 Call the `getCoinFlip` method on the deployed solution contract:
@@ -60,6 +62,18 @@ npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
 
 # Or specifying a custom address
 CONTRACT_ADDRESS=0xYourContractAddress npx hardhat run scripts/execute-coin-flip-guess.ts --network sepolia
+```
+
+### Manually Verify Contracts
+
+If automatic verification fails or you need to verify a contract manually:
+
+```shell
+# Verify a contract without constructor arguments
+npx hardhat run scripts/verify.ts --network sepolia -- --address 0xYourContractAddress
+
+# Verify a contract with constructor arguments
+npx hardhat run scripts/verify.ts --network sepolia -- --address 0xYourContractAddress --constructor-args arg1,arg2
 ```
 
 ## Challenge Documentation
