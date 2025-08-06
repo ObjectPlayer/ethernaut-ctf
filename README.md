@@ -92,9 +92,18 @@ The verification system supports multiple networks and will automatically detect
 
 Detailed documentation for each challenge is available in the `docs/` directory:
 
+- [Level 0: Hello Ethernaut Challenge](/docs/level-00-hello.md)
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
 
-## CoinFlip Challenge Summary
+## Challenge Summaries
+
+### Hello Ethernaut Challenge Summary
+
+The Hello Ethernaut challenge is an introductory level that teaches basic smart contract interaction. It involves following a series of clues by calling different functions, ultimately finding a password and using it to authenticate.
+
+The solution script (`solve-hello-ethernaut.ts`) walks through each step, calling the functions in sequence and extracting the necessary information to complete the challenge.
+
+### CoinFlip Challenge Summary
 
 The CoinFlip challenge requires predicting the outcome of a coin flip 10 times in a row. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
 
