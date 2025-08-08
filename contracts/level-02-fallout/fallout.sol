@@ -1,7 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+pragma solidity ^0.8.0;
 
-import "openzeppelin-contracts-06/math/SafeMath.sol";
+// Inline SafeMath library to avoid external dependencies
+library SafeMath {
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, "SafeMath: addition overflow");
+        return c;
+    }
+}
 
 contract Fallout {
     using SafeMath for uint256;
@@ -11,7 +18,7 @@ contract Fallout {
 
     /* constructor */
     function Fal1out() public payable {
-        owner = msg.sender;
+        owner = payable(msg.sender);
         allocations[owner] = msg.value;
     }
 
@@ -30,7 +37,7 @@ contract Fallout {
     }
 
     function collectAllocations() public onlyOwner {
-        msg.sender.transfer(address(this).balance);
+        payable(msg.sender).transfer(address(this).balance);
     }
 
     function allocatorBalance(address allocator) public view returns (uint256) {
