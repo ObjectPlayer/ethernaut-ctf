@@ -13,15 +13,34 @@ const deployCoinFlipSolution: DeployFunction = async function (hre: HardhatRunti
   const { deployer } = await getNamedAccounts();
   const chainId = network.config.chainId || 31337;
 
-  // Get the deployed CoinFlip contract
-  const coinFlip = await get("CoinFlip");
+  // Check if a target address was provided via command line arguments
+  const targetAddress = process.env.TARGET_ADDRESS;
+  
+  let coinFlipAddress: string;
+  
+  if (targetAddress) {
+    // Use the provided address
+    coinFlipAddress = targetAddress;
+    console.log("Using provided CoinFlip address:", coinFlipAddress);
+  } else {
+    try {
+      // Try to get the deployed CoinFlip contract
+      const coinFlip = await get("CoinFlip");
+      coinFlipAddress = coinFlip.address;
+      console.log("Using deployed CoinFlip at address:", coinFlipAddress);
+    } catch (error) {
+      console.error("Error: CoinFlip contract not found and no TARGET_ADDRESS provided.");
+      console.error("Please either deploy the CoinFlip contract first or provide a TARGET_ADDRESS environment variable.");
+      console.error("Example: TARGET_ADDRESS=0xYourContractAddress npx hardhat deploy --tags coin-flip-solution");
+      return; // Exit the deployment function
+    }
+  }
   
   console.log("Deploying GuessCoinFlip solution contract with account:", deployer);
-  console.log("Using CoinFlip at address:", coinFlip.address);
 
   const guessCoinFlip = await deploy("GuessCoinFlip", {
     from: deployer,
-    args: [coinFlip.address],
+    args: [coinFlipAddress],
     log: true,
     autoMine: true,
     waitConfirmations: !isLocalNetwork(chainId) ? 5 : 0, // wait for 5 confirmations on non-local networks
@@ -39,7 +58,7 @@ const deployCoinFlipSolution: DeployFunction = async function (hre: HardhatRunti
     try {
       await run("verify:verify", {
         address: guessCoinFlip.address,
-        constructorArguments: [coinFlip.address],
+        constructorArguments: [coinFlipAddress],
       });
       console.log("Contract verification successful!");
     } catch (error: any) {
@@ -47,7 +66,7 @@ const deployCoinFlipSolution: DeployFunction = async function (hre: HardhatRunti
         console.log("Contract is already verified!");
       } else if (error.message.includes("does not have bytecode")) {
         console.log("Verification failed: Contract bytecode not found on the explorer yet.");
-        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", guessCoinFlip.address, "--constructor-args", coinFlip.address);
+        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", guessCoinFlip.address, "--constructor-args", coinFlipAddress);
       } else {
         console.error("Verification failed:", error);
       }
@@ -61,5 +80,8 @@ export default deployCoinFlipSolution;
 
 // Tags help to select which deploy script to run
 deployCoinFlipSolution.tags = ["level-03", "coin-flip-solution"];
-// This script depends on the CoinFlip contract being deployed first
-deployCoinFlipSolution.dependencies = ["coin-flip"];
+// Only add dependency if we're not using a provided target address
+if (!process.env.TARGET_ADDRESS) {
+  // This script depends on the CoinFlip contract being deployed first
+  deployCoinFlipSolution.dependencies = ["coin-flip"];
+}

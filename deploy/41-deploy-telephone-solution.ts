@@ -13,15 +13,34 @@ const deployTelephoneCall: DeployFunction = async function (hre: HardhatRuntimeE
   const { deployer } = await getNamedAccounts();
   const chainId = network.config.chainId || 31337;
 
-  // Get the deployed Telephone contract
-  const telephone = await get("Telephone");
+  // Check if a target address was provided via command line arguments
+  const targetAddress = process.env.TARGET_ADDRESS;
+  
+  let telephoneAddress: string;
+  
+  if (targetAddress) {
+    // Use the provided address
+    telephoneAddress = targetAddress;
+    console.log("Using provided Telephone address:", telephoneAddress);
+  } else {
+    try {
+      // Try to get the deployed Telephone contract
+      const telephone = await get("Telephone");
+      telephoneAddress = telephone.address;
+      console.log("Using deployed Telephone at address:", telephoneAddress);
+    } catch (error) {
+      console.error("Error: Telephone contract not found and no TARGET_ADDRESS provided.");
+      console.error("Please either deploy the Telephone contract first or provide a TARGET_ADDRESS environment variable.");
+      console.error("Example: TARGET_ADDRESS=0xYourContractAddress npx hardhat deploy --tags telephone-solution");
+      return; // Exit the deployment function
+    }
+  }
   
   console.log("Deploying TelephoneCall solution contract with account:", deployer);
-  console.log("Using Telephone at address:", telephone.address);
 
   const telephoneCall = await deploy("TelephoneCall", {
     from: deployer,
-    args: [telephone.address],
+    args: [telephoneAddress],
     log: true,
     autoMine: true,
     waitConfirmations: !isLocalNetwork(chainId) ? 5 : 0, // wait for 5 confirmations on non-local networks
@@ -39,7 +58,7 @@ const deployTelephoneCall: DeployFunction = async function (hre: HardhatRuntimeE
     try {
       await run("verify:verify", {
         address: telephoneCall.address,
-        constructorArguments: [telephone.address],
+        constructorArguments: [telephoneAddress],
       });
       console.log("Contract verification successful!");
     } catch (error: any) {
@@ -47,7 +66,7 @@ const deployTelephoneCall: DeployFunction = async function (hre: HardhatRuntimeE
         console.log("Contract is already verified!");
       } else if (error.message.includes("does not have bytecode")) {
         console.log("Verification failed: Contract bytecode not found on the explorer yet.");
-        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", guessCoinFlip.address, "--constructor-args", coinFlip.address);
+        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", telephoneCall.address, "--constructor-args", telephoneAddress);
       } else {
         console.error("Verification failed:", error);
       }
@@ -61,5 +80,8 @@ export default deployTelephoneCall;
 
 // Tags help to select which deploy script to run
 deployTelephoneCall.tags = ["level-04", "telephone-solution"];
-// This script depends on the Telephone contract being deployed first
-deployTelephoneCall.dependencies = ["telephone"];
+// Only add dependency if we're not using a provided target address
+if (!process.env.TARGET_ADDRESS) {
+  // This script depends on the Telephone contract being deployed first
+  deployTelephoneCall.dependencies = ["telephone"];
+}
