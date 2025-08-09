@@ -1,32 +1,32 @@
 import { ethers } from "hardhat";
 
 /**
- * Execute the getCoinFlip method on a deployed GuessCoinFlip contract
+ * Execute the claimOwnership method on a deployed TelephoneCall contract
  * 
  * Usage: 
- * npx hardhat run scripts/level-03-coinflip/execute-coin-flip-guess.ts --network sepolia
- * CONTRACT_ADDRESS=0xYourAddress npx hardhat run scripts/level-03-coinflip/execute-coin-flip-guess.ts --network sepolia
+ * npx hardhat run scripts/level-04-telephone/execute-telephone-call.ts --network sepolia
+ * CONTRACT_ADDRESS=0xYourAddress npx hardhat run scripts/level-04-telephone/execute-telephone-call.ts --network sepolia
  */
 async function main() {
   // Get contract address from environment variable or use default
-  const defaultAddress = "0x946D0852932CFCA49879d3490bA90bfa417B6319";
+  const defaultAddress = "0x6823aA9C1002F3CF901cd8Df64f9843f2Afba09E";
   const contractAddress = process.env.CONTRACT_ADDRESS || defaultAddress;
   
   console.log(`Using contract address: ${contractAddress}`);
   
-  // Get the contract factory for GuessCoinFlip
-  const GuessCoinFlip = await ethers.getContractFactory("GuessCoinFlip");
+  // Get the contract factory for TelephoneCall
+  const TelephoneCall = await ethers.getContractFactory("TelephoneCall");
   
   // Connect to the deployed contract
-  const guessCoinFlip = GuessCoinFlip.attach(contractAddress);
+  const telephoneCall = TelephoneCall.attach(contractAddress);
   
-  console.log(`Connected to GuessCoinFlip contract at: ${contractAddress}`);
+  console.log(`Connected to TelephoneCall contract at: ${contractAddress}`);
   
   try {
-    // Call the getCoinFlip method
-    console.log("Executing getCoinFlip method...");
+    // Call the claimOwnership method
+    console.log("Executing claimOwnership method...");
     // Use the function interface to avoid TypeScript errors
-    const tx = await guessCoinFlip.getFunction("getCoinFlip")();
+    const tx = await telephoneCall.getFunction("claimOwnership")();
     
     // Wait for the transaction to be mined
     console.log("Waiting for transaction to be mined...");
@@ -37,7 +37,7 @@ async function main() {
     console.log(`Gas used: ${receipt.gasUsed.toString()}`);
     console.log(`Block number: ${receipt.blockNumber}`);
   } catch (error) {
-    console.error("\nError calling getCoinFlip method:", error);
+    console.error("\nError calling claimOwnership method:", error);
     process.exitCode = 1;
   }
 }
