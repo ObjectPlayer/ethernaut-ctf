@@ -3,20 +3,20 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { isLocalNetwork } from "../utils/network-config";
 
 /**
- * Deploys the CoinFlip contract from Ethernaut level 3
+ * Deploys the Telephone contract from Ethernaut level 4
  *
  * @param hre HardhatRuntimeEnvironment object
  */
-const deployCoinFlip: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployTelephone: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts, network, run } = hre;
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = network.config.chainId || 31337;
 
-  console.log("Deploying CoinFlip contract with account:", deployer);
+  console.log("Deploying Telephone contract with account:", deployer);
 
-  // Deploy the CoinFlip contract
-  const coinFlip = await deploy("CoinFlip", {
+  // Deploy the Telephone contract
+  const telephone = await deploy("Telephone", {
     from: deployer,
     args: [],
     log: true,
@@ -24,7 +24,7 @@ const deployCoinFlip: DeployFunction = async function (hre: HardhatRuntimeEnviro
     waitConfirmations: !isLocalNetwork(chainId) ? 5 : 0, // wait for 5 confirmations on non-local networks
   });
 
-  console.log("CoinFlip deployed to:", coinFlip.address);
+  console.log("Telephone deployed to:", telephone.address);
 
   // Verify the contract on non-local networks
   if (!isLocalNetwork(chainId) && process.env.ETHERSCAN_API_KEY) {
@@ -35,7 +35,7 @@ const deployCoinFlip: DeployFunction = async function (hre: HardhatRuntimeEnviro
     console.log("Verifying contract on Etherscan...");
     try {
       await run("verify:verify", {
-        address: coinFlip.address,
+        address: telephone.address,
         constructorArguments: [],
       });
       console.log("Contract verification successful!");
@@ -44,7 +44,7 @@ const deployCoinFlip: DeployFunction = async function (hre: HardhatRuntimeEnviro
         console.log("Contract is already verified!");
       } else if (error.message.includes("does not have bytecode")) {
         console.log("Verification failed: Contract bytecode not found on the explorer yet.");
-        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", coinFlip.address);
+        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", telephone.address);
       } else {
         console.error("Verification failed:", error);
       }
@@ -54,7 +54,7 @@ const deployCoinFlip: DeployFunction = async function (hre: HardhatRuntimeEnviro
   console.log("----------------------------------------------------");
 };
 
-export default deployCoinFlip;
+export default deployTelephone;
 
 // Tags help to select which deploy script to run
-deployCoinFlip.tags = ["level-03", "coin-flip"];
+deployTelephone.tags = ["level-04", "telephone"];
