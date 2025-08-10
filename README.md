@@ -9,12 +9,15 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-01-fallback/`: Fallback challenge contracts
   - `level-02-fallout/`: Fallout challenge contracts
   - `level-03-coin-flip/`: CoinFlip challenge contracts
+  - `level-04-telephone/`: Telephone challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
   - `20-deploy-fallout.ts`: Deploys the Level 2 Fallout contract
   - `30-deploy-coin-flip.ts`: Deploys the Level 3 CoinFlip contract
   - `31-deploy-coin-flip-solution.ts`: Deploys the CoinFlip solution contract
+  - `40-deploy-telephone.ts`: Deploys the Level 4 Telephone contract
+  - `41-deploy-telephone-solution.ts`: Deploys the Telephone solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -22,6 +25,10 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `solve-fallback.ts`: Solves the Fallback challenge
   - `level-02-fallout/`: Scripts for the Fallout challenge
     - `solve-fallout.ts`: Solves the Fallout challenge
+  - `level-03-coinflip/`: Scripts for the CoinFlip challenge
+    - `execute-coin-flip-guess.ts`: Executes the CoinFlip solution
+  - `level-04-telephone/`: Scripts for the Telephone challenge
+    - `execute-telephone-call.ts`: Executes the Telephone solution
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -30,6 +37,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-01-fallback.md`: Documentation for the Fallback challenge
   - `level-02-fallout.md`: Documentation for the Fallout challenge
   - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
+  - `level-04-telephone.md`: Documentation for the Telephone challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -114,6 +122,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 1: Fallback Challenge](/docs/level-01-fallback.md)
 - [Level 2: Fallout Challenge](/docs/level-02-fallout.md)
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
+- [Level 4: Telephone Challenge](/docs/level-04-telephone.md)
 
 ## Challenge Summaries
 
@@ -140,6 +149,12 @@ The solution script (`solve-fallout.ts`) calls the misspelled constructor functi
 The CoinFlip challenge requires predicting the outcome of a coin flip 10 times in a row. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
 
 The solution contract (`GuessCoinFlip`) uses the same algorithm to predict the outcome and make the correct guess.
+
+### Telephone Challenge Summary
+
+The Telephone challenge explores the difference between `tx.origin` and `msg.sender` in Ethereum. The goal is to claim ownership of the contract by exploiting this distinction.
+
+The solution contract (`TelephoneCall`) acts as an intermediary that calls the target contract, creating a scenario where `tx.origin` and `msg.sender` are different, allowing ownership to be claimed.
 
 ## Other Useful Commands
 
