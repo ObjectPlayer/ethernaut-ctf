@@ -14,11 +14,10 @@ contract GuessCoinFlip {
 
     constructor(address _coinFlipAddress) {
         coinflipAddress = _coinFlipAddress;
+        coinFlip = ICoinFlip(coinflipAddress);
     }
 
     function getCoinFlip() public {
-        coinFlip = ICoinFlip(coinflipAddress);
-
 
         uint256 blockValue = uint256(blockhash(block.number - 1));
         uint256 coinFlipFactor = blockValue / FACTOR;
