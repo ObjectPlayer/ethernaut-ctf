@@ -9,7 +9,7 @@ async function main() {
   await coinFLipGues.waitForDeployment();
 
   console.log(
-    `coinFLipGues contract deployed to ${lock.target}`
+    `coinFLipGues contract deployed to ${coinFLipGues.target}`
   );
 }
 
