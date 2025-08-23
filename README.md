@@ -5,13 +5,21 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
 ## Project Structure
 
 - `contracts/`: Contains the original challenge contracts and solution implementations organized by level
+  - `level-00-hello/`: Hello Ethernaut challenge contracts
+  - `level-03-coin-flip/`: CoinFlip challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
+  - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
+  - `30-deploy-coin-flip.ts`: Deploys the Level 3 CoinFlip contract
+  - `31-deploy-coin-flip-solution.ts`: Deploys the CoinFlip solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
-  - `execute-coin-flip-guess.ts`: Executes the solution for the CoinFlip challenge
+  - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
+    - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
 - `docs/`: Contains detailed documentation for each challenge with explanations and solution guides
+  - `level-00-hello.md`: Documentation for the Hello Ethernaut challenge
+  - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -92,9 +100,18 @@ The verification system supports multiple networks and will automatically detect
 
 Detailed documentation for each challenge is available in the `docs/` directory:
 
+- [Level 0: Hello Ethernaut Challenge](/docs/level-00-hello.md)
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
 
-## CoinFlip Challenge Summary
+## Challenge Summaries
+
+### Hello Ethernaut Challenge Summary
+
+The Hello Ethernaut challenge is an introductory level that teaches basic smart contract interaction. It involves following a series of clues by calling different functions, ultimately finding a password and using it to authenticate.
+
+The solution script (`solve-hello-ethernaut.ts`) walks through each step, calling the functions in sequence and extracting the necessary information to complete the challenge.
+
+### CoinFlip Challenge Summary
 
 The CoinFlip challenge requires predicting the outcome of a coin flip 10 times in a row. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
 
