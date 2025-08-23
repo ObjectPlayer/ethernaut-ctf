@@ -7,10 +7,12 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
 - `contracts/`: Contains the original challenge contracts and solution implementations organized by level
   - `level-00-hello/`: Hello Ethernaut challenge contracts
   - `level-01-fallback/`: Fallback challenge contracts
+  - `level-02-fallout/`: Fallout challenge contracts
   - `level-03-coin-flip/`: CoinFlip challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
+  - `20-deploy-fallout.ts`: Deploys the Level 2 Fallout contract
   - `30-deploy-coin-flip.ts`: Deploys the Level 3 CoinFlip contract
   - `31-deploy-coin-flip-solution.ts`: Deploys the CoinFlip solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
@@ -18,12 +20,15 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
     - `solve-fallback.ts`: Solves the Fallback challenge
+  - `level-02-fallout/`: Scripts for the Fallout challenge
+    - `solve-fallout.ts`: Solves the Fallout challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
 - `docs/`: Contains detailed documentation for each challenge with explanations and solution guides
   - `level-00-hello.md`: Documentation for the Hello Ethernaut challenge
   - `level-01-fallback.md`: Documentation for the Fallback challenge
+  - `level-02-fallout.md`: Documentation for the Fallout challenge
   - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
 - `test/`: Contains test suites for verifying contract functionality
 
@@ -107,6 +112,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 
 - [Level 0: Hello Ethernaut Challenge](/docs/level-00-hello.md)
 - [Level 1: Fallback Challenge](/docs/level-01-fallback.md)
+- [Level 2: Fallout Challenge](/docs/level-02-fallout.md)
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
 
 ## Challenge Summaries
@@ -122,6 +128,12 @@ The solution script (`solve-hello-ethernaut.ts`) walks through each step, callin
 The Fallback challenge focuses on contract ownership and fallback functions. The goal is to take ownership of the contract and drain its funds by exploiting a vulnerability in the `receive()` function.
 
 The solution script (`solve-fallback.ts`) makes a small contribution, triggers the fallback function to take ownership, and then withdraws all funds from the contract.
+
+### Fallout Challenge Summary
+
+The Fallout challenge demonstrates the dangers of constructor naming in legacy Solidity code. The goal is to take ownership of the contract by exploiting a typo in what was intended to be the constructor function.
+
+The solution script (`solve-fallout.ts`) calls the misspelled constructor function (`Fal1out` instead of `Fallout`) to claim ownership of the contract.
 
 ### CoinFlip Challenge Summary
 
