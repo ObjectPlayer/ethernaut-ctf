@@ -6,19 +6,24 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
 
 - `contracts/`: Contains the original challenge contracts and solution implementations organized by level
   - `level-00-hello/`: Hello Ethernaut challenge contracts
+  - `level-01-fallback/`: Fallback challenge contracts
   - `level-03-coin-flip/`: CoinFlip challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
+  - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
   - `30-deploy-coin-flip.ts`: Deploys the Level 3 CoinFlip contract
   - `31-deploy-coin-flip-solution.ts`: Deploys the CoinFlip solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
+  - `level-01-fallback/`: Scripts for the Fallback challenge
+    - `solve-fallback.ts`: Solves the Fallback challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
 - `docs/`: Contains detailed documentation for each challenge with explanations and solution guides
   - `level-00-hello.md`: Documentation for the Hello Ethernaut challenge
+  - `level-01-fallback.md`: Documentation for the Fallback challenge
   - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
 - `test/`: Contains test suites for verifying contract functionality
 
@@ -101,6 +106,7 @@ The verification system supports multiple networks and will automatically detect
 Detailed documentation for each challenge is available in the `docs/` directory:
 
 - [Level 0: Hello Ethernaut Challenge](/docs/level-00-hello.md)
+- [Level 1: Fallback Challenge](/docs/level-01-fallback.md)
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
 
 ## Challenge Summaries
@@ -110,6 +116,12 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 The Hello Ethernaut challenge is an introductory level that teaches basic smart contract interaction. It involves following a series of clues by calling different functions, ultimately finding a password and using it to authenticate.
 
 The solution script (`solve-hello-ethernaut.ts`) walks through each step, calling the functions in sequence and extracting the necessary information to complete the challenge.
+
+### Fallback Challenge Summary
+
+The Fallback challenge focuses on contract ownership and fallback functions. The goal is to take ownership of the contract and drain its funds by exploiting a vulnerability in the `receive()` function.
+
+The solution script (`solve-fallback.ts`) makes a small contribution, triggers the fallback function to take ownership, and then withdraws all funds from the contract.
 
 ### CoinFlip Challenge Summary
 
