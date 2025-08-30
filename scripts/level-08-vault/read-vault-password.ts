@@ -43,6 +43,14 @@ async function main() {
     console.log("Reading password from storage...");
     const password = await ethers.provider.getStorage(contractAddress, 1);
     console.log(`Retrieved password from storage: ${password}`);
+    // Convert bytes32 to string using ethers v6 methods
+    try {
+      // Try using ethers.toUtf8String for ethers v6
+      console.log(`password in readable form: ${ethers.toUtf8String(password)}`);
+    } catch (error) {
+      // Fallback to a manual conversion
+      console.log(`password in readable form: ${Buffer.from(password.slice(2), 'hex').toString().replace(/\u0000/g, '')}`);
+    }
     
     // Unlock the vault using the retrieved password
     console.log("Unlocking the vault...");
