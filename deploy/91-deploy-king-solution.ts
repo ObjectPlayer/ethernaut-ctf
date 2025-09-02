@@ -3,7 +3,10 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { isLocalNetwork } from "../utils/network-config";
 
 /**
- * Deploys the King solution for Ethernaut level 9
+ * Deploys the King solution (KingExploit) for Ethernaut level 9
+ * 
+ * To deploy with a specific target King address:
+ * TARGET_ADDRESS=0xYourKingAddress npx hardhat deploy --tags king-solution --network sepolia
  *
  * @param hre HardhatRuntimeEnvironment object
  */
@@ -31,7 +34,7 @@ const deployKingSolution: DeployFunction = async function (hre: HardhatRuntimeEn
     } catch (error) {
       console.error("Error: King contract not found and no TARGET_ADDRESS provided.");
       console.error("Please either deploy the King contract first or provide a TARGET_ADDRESS environment variable.");
-      console.error("Example: TARGET_ADDRESS=0xYourContractAddress npx hardhat deploy --tags king-solution");
+      console.error("Example: TARGET_ADDRESS=0xYourContractAddress npx hardhat deploy --tags king-solution --network sepolia");
       return; // Exit the deployment function
     }
   }
