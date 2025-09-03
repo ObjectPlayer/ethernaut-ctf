@@ -77,6 +77,8 @@ async function main() {
     const newKing = await kingContract._king();
     
     if (newKing.toLowerCase() === exploitAddress.toLowerCase()) {
+      console.log(`New king: ${newKing}`);
+
       console.log("\nExploit successful! KingExploit contract is now the king.");
       console.log("Since the KingExploit contract can't receive ETH, no one can become king anymore.");
     } else {

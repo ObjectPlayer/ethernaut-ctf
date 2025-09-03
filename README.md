@@ -14,6 +14,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-06-delegation/`: Delegation challenge contracts
   - `level-07-force/`: Force challenge contracts
   - `level-08-vault/`: Vault challenge contracts
+  - `level-09-king/`: King challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -28,6 +29,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `70-deploy-force.ts`: Deploys the Level 7 Force contract
   - `71-deploy-force-solution.ts`: Deploys the Force solution contract
   - `80-deploy-vault.ts`: Deploys the Level 8 Vault contract
+  - `90-deploy-king.ts`: Deploys the Level 9 King contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -47,6 +49,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-force-exploit.ts`: Executes the Force solution
   - `level-08-vault/`: Scripts for the Vault challenge
     - `read-vault-password.ts`: Reads the private password and unlocks the vault
+  - `level-09-king/`: Scripts for the King challenge
+    - `claim-throne.ts`: Deploys the KingExploit contract and claims the throne
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -147,6 +151,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 6: Delegation](./docs/level-06-delegation.md)
 - [Level 7: Force](./docs/level-07-force.md)
 - [Level 8: Vault](./docs/level-08-vault.md)
+- [Level 9: King](./docs/level-09-king.md)
 
 ## Challenge Summaries
 
@@ -203,6 +208,12 @@ The solution uses a contract that receives ETH and then self-destructs (`selfdes
 The Vault challenge explores the misconception that `private` variables in Solidity are truly private. The goal is to unlock a vault by discovering a password that's stored in a private variable.
 
 The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By reading the storage slot containing the password and using it to call the unlock function, the vault can be unlocked.
+
+### King Challenge Summary
+
+The King challenge demonstrates a Denial of Service (DoS) attack vector in smart contracts. The goal is to prevent anyone else from becoming the "king" by exploiting a vulnerability in the way the contract handles ETH transfers.
+
+The solution deploys a malicious contract that becomes the king but doesn't implement a receive or fallback function, making it impossible for the King contract to send ETH to it. This prevents anyone from claiming the throne afterwards, effectively breaking the game mechanics.
 
 ## Other Useful Commands
 
