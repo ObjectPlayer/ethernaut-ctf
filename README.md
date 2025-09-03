@@ -30,6 +30,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `71-deploy-force-solution.ts`: Deploys the Force solution contract
   - `80-deploy-vault.ts`: Deploys the Level 8 Vault contract
   - `90-deploy-king.ts`: Deploys the Level 9 King contract
+  - `91-deploy-king-solution.ts`: Deploys the King solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -62,6 +63,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-04-telephone.md`: Documentation for the Telephone challenge
   - `level-05-token.md`: Documentation for the Token challenge
   - `level-06-delegation.md`: Documentation for the Delegation challenge
+  - `level-07-force.md`: Documentation for the Force challenge
+  - `level-08-vault.md`: Documentation for the Vault challenge
+  - `level-09-king.md`: Documentation for the King challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
