@@ -1,7 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 
-import "@openzeppelin/contracts-06/math/SafeMath.sol";
+// import "@openzeppelin/contracts-06/math/SafeMath.sol";
+// Inline SafeMath library to avoid external dependencies
+library SafeMath {
+    function add(uint256 a, uint256 b) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, "SafeMath: addition overflow");
+        return c;
+    }
+}
+
 
 contract Reentrance {
     using SafeMath for uint256;
