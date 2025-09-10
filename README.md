@@ -17,6 +17,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-09-king/`: King challenge contracts
   - `level-10-reentrancy/`: Reentrancy challenge contracts
   - `level-11-elevator/`: Elevator challenge contracts
+  - `level-12-privacy/`: Privacy challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -37,6 +38,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `101-deploy-reentrance-solution.ts`: Deploys the Reentrance solution contract
   - `110-deploy-elevator.ts`: Deploys the Level 11 Elevator contract
   - `111-deploy-elevator-solution.ts`: Deploys the Elevator solution contract
+  - `120-deploy-privacy.ts`: Deploys the Level 12 Privacy contract
+  - `121-deploy-privacy-solution.ts`: Deploys the Privacy solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -62,6 +65,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-reentrance-exploit.ts`: Executes the reentrancy attack on the Reentrance contract
   - `level-11-elevator/`: Scripts for the Elevator challenge
     - `execute-elevator-exploit.ts`: Executes the elevator exploit to reach the top floor
+  - `level-12-privacy/`: Scripts for the Privacy challenge
+    - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -78,6 +83,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-09-king.md`: Documentation for the King challenge
   - `level-10-reentrancy.md`: Documentation for the Reentrancy challenge
   - `level-11-elevator.md`: Documentation for the Elevator challenge
+  - `level-12-privacy.md`: Documentation for the Privacy challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -170,6 +176,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 9: King](./docs/level-09-king.md)
 - [Level 10: Reentrancy](./docs/level-10-reentrancy.md)
 - [Level 11: Elevator](./docs/level-11-elevator.md)
+- [Level 12: Privacy](./docs/level-12-privacy.md)
 
 ## Challenge Summaries
 
@@ -244,6 +251,12 @@ The solution creates an exploit contract that takes advantage of the fact that t
 The Elevator challenge demonstrates how interfaces can be manipulated in Solidity. The goal is to reach the top floor of an elevator by exploiting a vulnerability in how the Elevator contract interacts with the Building interface.
 
 The solution implements a malicious Building interface that returns inconsistent values for the same function call. By returning false on the first call to isLastFloor() and true on the second call, we can trick the Elevator contract into thinking we've reached the top floor.
+
+### Privacy Challenge Summary
+
+The Privacy challenge explores the misconception that `private` variables in Solidity are truly private. The goal is to unlock the contract by discovering a key that's stored in a private variable.
+
+The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By determining the correct storage slot, reading the bytes32 value, converting it to bytes16, and using it as the key, we can unlock the Privacy contract.
 
 ## Other Useful Commands
 
