@@ -66,7 +66,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-11-elevator/`: Scripts for the Elevator challenge
     - `execute-elevator-exploit.ts`: Executes the elevator exploit to reach the top floor
   - `level-12-privacy/`: Scripts for the Privacy challenge
-    - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract
+    - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract using the PrivacyExploit contract
+    - `read-privacy-key.ts`: Directly reads the key from storage and unlocks the contract
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -256,7 +257,7 @@ The solution implements a malicious Building interface that returns inconsistent
 
 The Privacy challenge explores the misconception that `private` variables in Solidity are truly private. The goal is to unlock the contract by discovering a key that's stored in a private variable.
 
-The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By determining the correct storage slot, reading the bytes32 value, converting it to bytes16, and using it as the key, we can unlock the Privacy contract.
+The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By determining the correct storage slot, reading the bytes32 value, converting it to bytes16, and using it as the key, we can unlock the Privacy contract. This can be done either directly with a script that reads storage or through a separate exploit contract.
 
 ## Other Useful Commands
 
