@@ -138,7 +138,34 @@ contract PrivacyExploit {
 
 ## Step-by-Step Solution Guide
 
-### 1. Deploy the Privacy Contract
+### Option 1: Direct Storage Access Method
+
+This is the simplest approach, similar to the Vault challenge:
+
+#### 1. Read the Storage and Unlock the Contract Directly
+
+You can solve this challenge with a single script that reads the private data from storage and unlocks the contract:
+
+```shell
+# Run with default contract address
+npx hardhat run scripts/level-12-privacy/read-privacy-key.ts --network sepolia
+
+# Or specify a target contract address
+CONTRACT_ADDRESS=0xYourPrivacyAddress npx hardhat run scripts/level-12-privacy/read-privacy-key.ts --network sepolia
+```
+
+The script will:
+1. Check if the contract is locked
+2. Read the data[2] value from storage slot 5
+3. Convert it to bytes16 format
+4. Call the unlock function with the extracted key
+5. Verify the contract is now unlocked
+
+### Option 2: Using the PrivacyExploit Contract
+
+Alternatively, you can use a contract-based approach:
+
+#### 1. Deploy the Privacy Contract
 
 If you're testing locally, deploy the Privacy contract first:
 
@@ -148,7 +175,7 @@ npx hardhat deploy --tags privacy
 
 This will generate random data for the contract and print it to the console.
 
-### 2. Deploy the PrivacyExploit Contract
+#### 2. Deploy the PrivacyExploit Contract
 
 Deploy the PrivacyExploit contract targeting the Privacy contract:
 
@@ -162,7 +189,7 @@ Or with a specific Privacy contract address:
 TARGET_ADDRESS=0xYourPrivacyAddress npx hardhat deploy --tags privacy-solution --network sepolia
 ```
 
-### 3. Read the Storage Data
+#### 3. Read the Storage Data
 
 To read the storage data at slot 5, you can either:
 
@@ -170,10 +197,10 @@ To read the storage data at slot 5, you can either:
 2. Read it directly from the blockchain:
 
 ```javascript
-const storageData = await ethers.provider.getStorageAt(privacyAddress, 5);
+const storageData = await ethers.provider.getStorage(privacyAddress, 5);
 ```
 
-### 4. Execute the Exploit
+#### 4. Execute the Exploit
 
 Run the provided script to execute the attack:
 
@@ -186,9 +213,9 @@ Parameters:
 - `TARGET_ADDRESS`: Optional - will use the target address stored in the exploit contract if not provided
 - `DATA_SLOT_VALUE`: Optional - if provided, will use this value as the storage data; otherwise, reads from the blockchain
 
-### 5. Verify Your Success
+### Verify Your Success
 
-After executing the solution, verify that the `locked` variable in the Privacy contract is set to `false`.
+With either approach, after executing the solution, verify that the `locked` variable in the Privacy contract is set to `false`.
 
 ## Lessons Learned
 
