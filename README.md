@@ -18,6 +18,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-10-reentrancy/`: Reentrancy challenge contracts
   - `level-11-elevator/`: Elevator challenge contracts
   - `level-12-privacy/`: Privacy challenge contracts
+  - `level-13-gatekeeper-1/`: GatekeeperOne challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -40,6 +41,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `111-deploy-elevator-solution.ts`: Deploys the Elevator solution contract
   - `120-deploy-privacy.ts`: Deploys the Level 12 Privacy contract
   - `121-deploy-privacy-solution.ts`: Deploys the Privacy solution contract
+  - `130-deploy-gatekeeper-one.ts`: Deploys the Level 13 GatekeeperOne contract
+  - `131-deploy-gatekeeper-one-solution.ts`: Deploys the GatekeeperOne solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -68,6 +71,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-12-privacy/`: Scripts for the Privacy challenge
     - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract using the PrivacyExploit contract
     - `read-privacy-key.ts`: Directly reads the key from storage and unlocks the contract
+  - `level-13-gatekeeper-1/`: Scripts for the GatekeeperOne challenge
+    - `execute-gatekeeper-one-exploit.ts`: Executes the GatekeeperOne exploit to bypass all three gates
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -85,6 +90,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-10-reentrancy.md`: Documentation for the Reentrancy challenge
   - `level-11-elevator.md`: Documentation for the Elevator challenge
   - `level-12-privacy.md`: Documentation for the Privacy challenge
+  - `level-13-gatekeeper-one.md`: Documentation for the GatekeeperOne challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -178,6 +184,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 10: Reentrancy](./docs/level-10-reentrancy.md)
 - [Level 11: Elevator](./docs/level-11-elevator.md)
 - [Level 12: Privacy](./docs/level-12-privacy.md)
+- [Level 13: GatekeeperOne](./docs/level-13-gatekeeper-one.md)
 
 ## Challenge Summaries
 
@@ -258,6 +265,12 @@ The solution implements a malicious Building interface that returns inconsistent
 The Privacy challenge explores the misconception that `private` variables in Solidity are truly private. The goal is to unlock the contract by discovering a key that's stored in a private variable.
 
 The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By determining the correct storage slot, reading the bytes32 value, converting it to bytes16, and using it as the key, we can unlock the Privacy contract. This can be done either directly with a script that reads storage or through a separate exploit contract.
+
+### GatekeeperOne Challenge Summary
+
+The GatekeeperOne challenge tests your understanding of gas manipulation, contract interactions, and bitwise operations. The goal is to pass three gates to become the entrant in the contract.
+
+The solution involves creating an exploit contract that acts as an intermediary (to pass gate one), carefully controlling the gas sent with the transaction (to pass gate two), and crafting a special bytes8 key using bitwise operations that satisfies multiple conditions (to pass gate three).
 
 ## Other Useful Commands
 
