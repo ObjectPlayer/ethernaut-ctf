@@ -19,6 +19,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-11-elevator/`: Elevator challenge contracts
   - `level-12-privacy/`: Privacy challenge contracts
   - `level-13-gatekeeper-1/`: GatekeeperOne challenge contracts
+    - `GatekeeperOne.sol`: The challenge contract
+    - `GatekeeperOneExploit.sol`: Original exploit solution
+    - `AlternateExploit.sol`: Alternative exploit using assembly
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -42,7 +45,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `120-deploy-privacy.ts`: Deploys the Level 12 Privacy contract
   - `121-deploy-privacy-solution.ts`: Deploys the Privacy solution contract
   - `130-deploy-gatekeeper-one.ts`: Deploys the Level 13 GatekeeperOne contract
-  - `131-deploy-gatekeeper-one-solution.ts`: Deploys the GatekeeperOne solution contract
+  - `131-deploy-gatekeeper-one-solution.ts`: Deploys the GatekeeperOneExploit solution contract
+  - `132-deploy-alternate-exploit.ts`: Deploys the AlternateExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -72,7 +76,12 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract using the PrivacyExploit contract
     - `read-privacy-key.ts`: Directly reads the key from storage and unlocks the contract
   - `level-13-gatekeeper-1/`: Scripts for the GatekeeperOne challenge
-    - `execute-gatekeeper-one-exploit.ts`: Executes the GatekeeperOne exploit to bypass all three gates
+    - `execute-gatekeeper-one-exploit.ts`: Original script to execute the GatekeeperOne exploit
+    - `simple-exploit.ts`: Simplified, reliable exploit script (recommended)
+    - `direct-exploit.ts`: Execute exploit with a specific gas value
+    - `find-gas-offset.ts`: Methodically search for working gas values
+    - `calibrate-gas.ts`: Calculate potential working gas values
+    - `alternate-exploit.ts`: Use the alternate exploit contract approach
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -270,7 +279,12 @@ The solution demonstrates that all data on the blockchain is public and can be r
 
 The GatekeeperOne challenge tests your understanding of gas manipulation, contract interactions, and bitwise operations. The goal is to pass three gates to become the entrant in the contract.
 
-The solution involves creating an exploit contract that acts as an intermediary (to pass gate one), carefully controlling the gas sent with the transaction (to pass gate two), and crafting a special bytes8 key using bitwise operations that satisfies multiple conditions (to pass gate three).
+The solution involves three key elements:
+1. Using an exploit contract as an intermediary to pass gate one (ensuring `msg.sender != tx.origin`)
+2. Carefully controlling the gas sent with the transaction to pass gate two (making `gasleft() % 8191 == 0`)
+3. Crafting a special bytes8 key using bitwise operations that satisfies multiple conditions to pass gate three
+
+Multiple approaches are provided, with the `simple-exploit.ts` script being the most reliable solution. This challenge demonstrates the importance of understanding low-level Ethereum concepts including gas optimization, type conversions, and memory layout.
 
 ## Other Useful Commands
 

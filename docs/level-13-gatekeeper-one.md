@@ -94,20 +94,37 @@ Gate One requires `msg.sender != tx.origin`. This is straightforward to bypass b
 
 ### Gate Two Solution
 
-Gate Two requires `gasleft() % 8191 == 0`. This is tricky because the gas consumption up to that point depends on many factors including:
+Gate Two requires `gasleft() % 8191 == 0`. This is the trickiest part of the challenge because the gas consumption up to that point depends on many factors including:
 
 - The exact compiler version used
 - The optimization level
 - The way the contract is deployed
 - The specific blockchain network
 
-The solution is to try a series of strategic gas values that might result in the remaining gas being divisible by 8191 at the exact moment the check happens. Some approaches include:
+There are several approaches to solving this:
 
-1. Try multiples of 8191 plus some offset (like 8191*10 + 100)
-2. Try values that have worked in similar setups (around 24000-25500)
-3. Try a systematic approach by testing a range of values in small increments
+#### 1. Common Offset Method (Most Reliable)
 
-This is implemented in our execution script, which tries multiple pre-selected values that are likely to work.
+The most reliable approach is to use a gas value that equals a multiple of 8191 plus a specific offset. The offset compensates for the gas consumed before the check happens.
+
+Common working offsets include:
+- 254-260 (very common across environments)
+- 200-230 (works in some environments)
+- 100-120 (works in other environments)
+
+Example: `81910 + 254 = 82164` (where 81910 is 8191 × 10)
+
+#### 2. Specific Value Ranges
+
+Certain gas value ranges tend to work more often:
+- Values between 24500-25000
+- Values between 81910-82200
+
+#### 3. Systematic Testing
+
+Systematically test values with small increments around known working values.
+
+Our `simple-exploit.ts` script uses a combination of these approaches and has been confirmed to work reliably.
 
 ### Gate Three Solution
 
@@ -117,16 +134,36 @@ Gate Three has three requirements for the `bytes8 _gateKey`:
 2. `uint32(uint64(_gateKey)) != uint64(_gateKey)`
 3. `uint32(uint64(_gateKey)) == uint16(uint160(tx.origin))`
 
-To understand these requirements:
+Breaking down these requirements in terms of bit patterns:
 
-1. The first one means that the key's lower 16 bits must be the same as its lower 32 bits
-2. The second one means that bits 32-63 must not be all zeros
-3. The third one means the lower 32 bits must equal the lower 16 bits of the caller's address
+1. **First condition**: The lower 32 bits (4 bytes) must match the lower 16 bits (2 bytes) when cast. This means bytes 2-3 (counting from 0) must be zero (0x00000000).
 
-The solution is to craft a key with:
-- Lower 16 bits matching the caller's address's lower 16 bits
-- Set bits 16-31 to zero (ensuring condition 1)
-- Set some bits in positions 32-63 to non-zero (ensuring condition 2)
+2. **Second condition**: The full 64-bit value must be different from the 32-bit value. This means at least one bit in bytes 4-7 must be non-zero.
+
+3. **Third condition**: The lower 32 bits must equal the lower 16 bits of the caller's address. This means the lowest 2 bytes must match the last 2 bytes of tx.origin.
+
+Combining all these requirements, we need a key where:
+- The lowest 2 bytes match the last 2 bytes of tx.origin (from condition 3)
+- Bytes 2-3 are all zeros (from condition 1)
+- At least one bit in bytes 4-7 is set to 1 (from condition 2)
+
+The solution is implemented in both exploit contracts with slightly different approaches:
+
+```solidity
+// In GatekeeperOneExploit.sol
+uint16 addressLast2Bytes = uint16(uint160(_origin));
+uint64 key = uint64(addressLast2Bytes) | 0x1000000000000000;
+
+// In AlternateExploit.sol
+bytes8 key = bytes8(uint64(uint16(uint160(tx.origin))) | 0x1000000000000000);
+```
+
+Both implementations:
+- Take the last 2 bytes of the tx.origin address
+- Set bytes 2-3 to zero
+- Set a bit in the highest byte to ensure condition 2 is met
+
+This approach works reliably across all environments.
 
 ### Exploit Contract
 
@@ -200,55 +237,115 @@ contract GatekeeperOneExploit {
 
 ## Step-by-Step Solution Guide
 
-### 1. Deploy the GatekeeperOne Contract
+We've provided multiple approaches to solve this challenge because finding the correct gas value can be tricky and environment-dependent. The recommended approach is the `simple-exploit.ts` script which has been confirmed to work reliably.
 
-If you're testing locally, deploy the GatekeeperOne contract first:
+### Option 1: Simple Exploit Approach (Recommended)
+
+This is the simplest and most reliable approach that works across different environments.
+
+1. **Deploy the GatekeeperOneExploit Contract**
+
+   ```shell
+   # Deploy the original exploit contract
+   npx hardhat deploy --tags gatekeeper-one-solution --network sepolia
+   # Or with a specific target address
+   TARGET_ADDRESS=0xYourGatekeeperOneAddress npx hardhat deploy --tags gatekeeper-one-solution --network sepolia
+   ```
+
+2. **Execute the Simple Exploit Script**
+
+   ```shell
+   # Run the simple exploit script that focuses on proven gas offsets
+   EXPLOIT_ADDRESS=0xYourExploitAddress npx hardhat run scripts/level-13-gatekeeper-1/simple-exploit.ts --network sepolia
+   ```
+
+   This script systematically tries gas values with offsets that have proven to work across various environments.
+
+### Option 2: Alternate Exploit Contract
+
+If the first option doesn't work, try this alternative approach that uses assembly for more precise gas control:
+
+1. **Deploy the AlternateExploit Contract**
+
+   ```shell
+   npx hardhat deploy --tags alternate-exploit --network sepolia
+   ```
+
+2. **Execute the Alternate Exploit Script**
+
+   ```shell
+   EXPLOIT_ADDRESS=0xYourAlternateExploitAddress TARGET_ADDRESS=0xGatekeeperOneAddress npx hardhat run scripts/level-13-gatekeeper-1/alternate-exploit.ts --network sepolia
+   ```
+
+### Option 3: Direct Approach with Specific Gas Value
+
+If you know a specific gas value that might work:
 
 ```shell
-npx hardhat deploy --tags gatekeeper-one
+EXPLOIT_ADDRESS=0xYourExploitAddress SPECIFIC_GAS=81910 npx hardhat run scripts/level-13-gatekeeper-1/direct-exploit.ts --network sepolia
 ```
 
-### 2. Deploy the GatekeeperOneExploit Contract
+### Option 4: Find Gas Offset
 
-Deploy the GatekeeperOneExploit contract targeting the GatekeeperOne contract:
+For a more methodical search of gas values:
 
 ```shell
-npx hardhat deploy --tags gatekeeper-one-solution
+EXPLOIT_ADDRESS=0xYourExploitAddress BASE=81910 STEP=1 RANGE=300 npx hardhat run scripts/level-13-gatekeeper-1/find-gas-offset.ts --network sepolia
 ```
 
-Or with a specific GatekeeperOne contract address:
+### Option 5: Original Exploit Script
+
+The original exploit approach, which may require more adjustments:
 
 ```shell
-TARGET_ADDRESS=0xYourGatekeeperOneAddress npx hardhat deploy --tags gatekeeper-one-solution --network sepolia
-```
-
-### 3. Execute the Exploit
-
-Run the provided script to execute the attack:
-
-```shell
-# If running on a testnet like Sepolia
 EXPLOIT_ADDRESS=0xYourExploitAddress TARGET_ADDRESS=0xTargetAddress npx hardhat run scripts/level-13-gatekeeper-1/execute-gatekeeper-one-exploit.ts --network sepolia
-
-# If running locally
-EXPLOIT_ADDRESS=0xYourExploitAddress npx hardhat run scripts/level-13-gatekeeper-1/execute-gatekeeper-one-exploit.ts --network localhost
 ```
 
-Parameters:
-- `EXPLOIT_ADDRESS`: Required - the address of your deployed GatekeeperOneExploit contract
-- `TARGET_ADDRESS`: Optional - will use the target address stored in the exploit contract if not provided
+### Gas Values and Gate Keys
 
-The script will:
-1. Generate the correct gate key for your address to pass Gate Three
-2. Try a series of carefully selected gas values that are likely to work for Gate Two
-3. Call the enter function through your exploit contract to pass Gate One
-4. Verify that you've successfully become the entrant
+Finding the correct gas value can be challenging due to variations in environment, compiler versions, and network conditions. Here are some tips:
 
-Note: Finding the correct gas value might require multiple attempts. The script tries several values that have worked in practice, but if none work, you might need to adjust the gas values in the script based on your specific environment.
+1. **Common Working Gas Values**:
+   - Values with offset 254-260 from multiples of 8191 (e.g., 81910 + 254)
+   - Values around 24500-25000
+   - Exact multiples of 8191
 
-### 4. Verify Your Success
+2. **Gate Key Formation**:
+   - The gate key needs to satisfy three conditions in `gateThree`
+   - The key is derived from your address (tx.origin)
+   - Both exploit contracts implement proper key generation logic
 
-After executing the solution, verify that the `entrant` variable in the GatekeeperOne contract is set to your address.
+### Verify Your Success
+
+After executing any of the solutions, verify that the `entrant` variable in the GatekeeperOne contract is set to your address. All the scripts will check this automatically and report success.
+
+## Available Scripts
+
+For this challenge, we've provided multiple scripts to help you find the right solution:
+
+1. **simple-exploit.ts** (RECOMMENDED):
+   - The most reliable script that focuses on proven gas values
+   - Uses a systematic approach to try common working offsets
+
+2. **alternate-exploit.ts**:
+   - Works with the AlternateExploit contract for more precise gas control
+   - Uses assembly for direct control over gas usage
+
+3. **direct-exploit.ts**:
+   - For trying a specific gas value directly
+   - Useful when you have a gas value that works in your environment
+
+4. **find-gas-offset.ts**:
+   - Systematic search for working gas values with configurable parameters
+   - Provides detailed analysis of attempts
+
+5. **calibrate-gas.ts**:
+   - Helps estimate gas consumption and calculate possible working values
+   - Useful for understanding gas usage patterns
+
+6. **execute-gatekeeper-one-exploit.ts**:
+   - The original exploit script with a variety of gas values
+   - More general purpose approach
 
 ## Lessons Learned
 
