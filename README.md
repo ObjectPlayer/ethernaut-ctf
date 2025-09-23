@@ -11,6 +11,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-03-coin-flip/`: CoinFlip challenge contracts
   - `level-04-telephone/`: Telephone challenge contracts
   - `level-05-token/`: Token challenge contracts
+  - `level-06-delegation/`: Delegation challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -21,6 +22,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `41-deploy-telephone-solution.ts`: Deploys the Telephone solution contract
   - `50-deploy-token.ts`: Deploys the Level 5 Token contract
   - `51-deploy-token-solution.ts`: Deploys the Token solution contract
+  - `60-deploy-delegation.ts`: Deploys the Level 6 Delegation contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -34,6 +36,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-telephone-call.ts`: Executes the Telephone solution
   - `level-05-token/`: Scripts for the Token challenge
     - `execute-token-claim.ts`: Executes the Token solution
+  - `level-06-delegation/`: Scripts for the Delegation challenge
+    - `execute-delegation-exploit.ts`: Executes the Delegation solution
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -44,6 +48,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-03-coin-flip.md`: Documentation for the CoinFlip challenge
   - `level-04-telephone.md`: Documentation for the Telephone challenge
   - `level-05-token.md`: Documentation for the Token challenge
+  - `level-06-delegation.md`: Documentation for the Delegation challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -130,6 +135,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 3: CoinFlip Challenge](/docs/level-03-coin-flip.md)
 - [Level 4: Telephone](./docs/level-04-telephone.md)
 - [Level 5: Token](./docs/level-05-token.md)
+- [Level 6: Delegation](./docs/level-06-delegation.md)
 
 ## Challenge Summaries
 
@@ -168,6 +174,12 @@ The solution contract (`TelephoneCall`) acts as an intermediary that calls the t
 The Token challenge demonstrates the dangers of integer underflow in Solidity. The goal is to gain a large number of tokens by exploiting a vulnerability in the `transfer` function.
 
 The solution contract (`TokenOverflowHack`) calls the `transfer` function with a value of 1, even if the balance is 0. This will cause an underflow and give the attacker a large number of tokens.
+
+### Delegation Challenge Summary
+
+The Delegation challenge focuses on the `delegatecall` function and its security implications. The goal is to claim ownership of a contract by exploiting how `delegatecall` preserves the context (including storage) of the calling contract.
+
+The solution directly calls the Delegation contract with the function signature of `pwn()`, which triggers the fallback function to execute the `pwn()` function via `delegatecall` in the context of the Delegation contract, changing the owner to the caller.
 
 ## Other Useful Commands
 
