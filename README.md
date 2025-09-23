@@ -12,6 +12,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-04-telephone/`: Telephone challenge contracts
   - `level-05-token/`: Token challenge contracts
   - `level-06-delegation/`: Delegation challenge contracts
+  - `level-07-force/`: Force challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -23,6 +24,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `50-deploy-token.ts`: Deploys the Level 5 Token contract
   - `51-deploy-token-solution.ts`: Deploys the Token solution contract
   - `60-deploy-delegation.ts`: Deploys the Level 6 Delegation contract
+  - `70-deploy-force.ts`: Deploys the Level 7 Force contract
+  - `71-deploy-force-solution.ts`: Deploys the Force solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -38,6 +41,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-token-claim.ts`: Executes the Token solution
   - `level-06-delegation/`: Scripts for the Delegation challenge
     - `execute-delegation-exploit.ts`: Executes the Delegation solution
+  - `level-07-force/`: Scripts for the Force challenge
+    - `execute-force-exploit.ts`: Executes the Force solution
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -136,6 +141,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 4: Telephone](./docs/level-04-telephone.md)
 - [Level 5: Token](./docs/level-05-token.md)
 - [Level 6: Delegation](./docs/level-06-delegation.md)
+- [Level 7: Force](./docs/level-07-force.md)
 
 ## Challenge Summaries
 
@@ -180,6 +186,12 @@ The solution contract (`TokenOverflowHack`) calls the `transfer` function with a
 The Delegation challenge focuses on the `delegatecall` function and its security implications. The goal is to claim ownership of a contract by exploiting how `delegatecall` preserves the context (including storage) of the calling contract.
 
 The solution directly calls the Delegation contract with the function signature of `pwn()`, which triggers the fallback function to execute the `pwn()` function via `delegatecall` in the context of the Delegation contract, changing the owner to the caller.
+
+### Force Challenge Summary
+
+The Force challenge explores a unique way to send ETH to a contract that has no payable functions. The goal is to make the target contract's balance greater than zero despite it having no mechanism to receive ETH.
+
+The solution uses a contract that receives ETH and then self-destructs (`selfdestruct`), forcing its balance to be sent to the target contract. This demonstrates that there's no way to create a contract that is guaranteed to have zero ETH balance.
 
 ## Other Useful Commands
 
