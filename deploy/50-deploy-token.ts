@@ -46,7 +46,7 @@ const deployToken: DeployFunction = async function (hre: HardhatRuntimeEnvironme
         console.log("Contract is already verified!");
       } else if (error.message.includes("does not have bytecode")) {
         console.log("Verification failed: Contract bytecode not found on the explorer yet.");
-        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", telephone.address);
+        console.log("You can manually verify later using: npx hardhat run scripts/verify.ts --network sepolia -- --address", token.address);
       } else {
         console.error("Verification failed:", error);
       }
