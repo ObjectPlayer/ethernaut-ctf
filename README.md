@@ -13,6 +13,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-05-token/`: Token challenge contracts
   - `level-06-delegation/`: Delegation challenge contracts
   - `level-07-force/`: Force challenge contracts
+  - `level-08-vault/`: Vault challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -26,6 +27,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `60-deploy-delegation.ts`: Deploys the Level 6 Delegation contract
   - `70-deploy-force.ts`: Deploys the Level 7 Force contract
   - `71-deploy-force-solution.ts`: Deploys the Force solution contract
+  - `80-deploy-vault.ts`: Deploys the Level 8 Vault contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -43,6 +45,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-delegation-exploit.ts`: Executes the Delegation solution
   - `level-07-force/`: Scripts for the Force challenge
     - `execute-force-exploit.ts`: Executes the Force solution
+  - `level-08-vault/`: Scripts for the Vault challenge
+    - `read-vault-password.ts`: Reads the private password and unlocks the vault
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -142,6 +146,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 5: Token](./docs/level-05-token.md)
 - [Level 6: Delegation](./docs/level-06-delegation.md)
 - [Level 7: Force](./docs/level-07-force.md)
+- [Level 8: Vault](./docs/level-08-vault.md)
 
 ## Challenge Summaries
 
@@ -192,6 +197,12 @@ The solution directly calls the Delegation contract with the function signature 
 The Force challenge explores a unique way to send ETH to a contract that has no payable functions. The goal is to make the target contract's balance greater than zero despite it having no mechanism to receive ETH.
 
 The solution uses a contract that receives ETH and then self-destructs (`selfdestruct`), forcing its balance to be sent to the target contract. This demonstrates that there's no way to create a contract that is guaranteed to have zero ETH balance.
+
+### Vault Challenge Summary
+
+The Vault challenge explores the misconception that `private` variables in Solidity are truly private. The goal is to unlock a vault by discovering a password that's stored in a private variable.
+
+The solution demonstrates that all data on the blockchain is public and can be read directly from storage, regardless of Solidity's visibility modifiers. By reading the storage slot containing the password and using it to call the unlock function, the vault can be unlocked.
 
 ## Other Useful Commands
 
