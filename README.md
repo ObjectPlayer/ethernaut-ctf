@@ -16,6 +16,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-08-vault/`: Vault challenge contracts
   - `level-09-king/`: King challenge contracts
   - `level-10-reentrancy/`: Reentrancy challenge contracts
+  - `level-11-elevator/`: Elevator challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -34,6 +35,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `91-deploy-king-solution.ts`: Deploys the King solution contract
   - `100-deploy-reentrance.ts`: Deploys the Level 10 Reentrance contract
   - `101-deploy-reentrance-solution.ts`: Deploys the Reentrance solution contract
+  - `110-deploy-elevator.ts`: Deploys the Level 11 Elevator contract
+  - `111-deploy-elevator-solution.ts`: Deploys the Elevator solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -57,6 +60,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `claim-throne.ts`: Deploys the KingExploit contract and claims the throne
   - `level-10-reentrancy/`: Scripts for the Reentrancy challenge
     - `execute-reentrance-exploit.ts`: Executes the reentrancy attack on the Reentrance contract
+  - `level-11-elevator/`: Scripts for the Elevator challenge
+    - `execute-elevator-exploit.ts`: Executes the elevator exploit to reach the top floor
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -72,6 +77,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-08-vault.md`: Documentation for the Vault challenge
   - `level-09-king.md`: Documentation for the King challenge
   - `level-10-reentrancy.md`: Documentation for the Reentrancy challenge
+  - `level-11-elevator.md`: Documentation for the Elevator challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -163,6 +169,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 8: Vault](./docs/level-08-vault.md)
 - [Level 9: King](./docs/level-09-king.md)
 - [Level 10: Reentrancy](./docs/level-10-reentrancy.md)
+- [Level 11: Elevator](./docs/level-11-elevator.md)
 
 ## Challenge Summaries
 
@@ -231,6 +238,12 @@ The solution deploys a malicious contract that becomes the king but doesn't impl
 The Reentrancy challenge introduces one of the most famous vulnerabilities in Ethereum smart contracts. The goal is to drain all the funds from the Reentrance contract by exploiting a vulnerability in its withdraw function.
 
 The solution creates an exploit contract that takes advantage of the fact that the Reentrance contract updates balances after sending ETH. By implementing a receive function that recursively calls withdraw again before the first call completes, the exploit can drain all the funds from the contract.
+
+### Elevator Challenge Summary
+
+The Elevator challenge demonstrates how interfaces can be manipulated in Solidity. The goal is to reach the top floor of an elevator by exploiting a vulnerability in how the Elevator contract interacts with the Building interface.
+
+The solution implements a malicious Building interface that returns inconsistent values for the same function call. By returning false on the first call to isLastFloor() and true on the second call, we can trick the Elevator contract into thinking we've reached the top floor.
 
 ## Other Useful Commands
 
