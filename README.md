@@ -88,8 +88,6 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `calibrate-gas.ts`: Calculate potential working gas values
     - `alternate-exploit.ts`: Use the alternate exploit contract approach
   - `level-14-gatekeeper-2/`: Scripts for the GatekeeperTwo challenge
-    - `deploy-gatekeeper-two.ts`: Deploys the GatekeeperTwo contract
-    - `deploy-gatekeeper-two-exploit.ts`: Deploys the GatekeeperTwoExploit contract
     - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations

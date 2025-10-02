@@ -175,7 +175,7 @@ contract GatekeeperTwoExploit {
 1. **Deploy the GatekeeperTwo Contract**
 
    ```shell
-   npx hardhat run scripts/level-14-gatekeeper-2/deploy-gatekeeper-two.ts --network sepolia
+   npx hardhat deploy --tags gatekeeper-two --network sepolia
    ```
 
 2. **Deploy the Exploit Contract**
@@ -183,7 +183,7 @@ contract GatekeeperTwoExploit {
    This will automatically attempt to make you the entrant in a single transaction:
    
    ```shell
-   TARGET_ADDRESS=0xYourGatekeeperTwoAddress npx hardhat run scripts/level-14-gatekeeper-2/deploy-gatekeeper-two-exploit.ts --network sepolia
+   TARGET_ADDRESS=0xYourGatekeeperTwoAddress npx hardhat deploy --tags gatekeeper-two-solution --network sepolia
    ```
 
 3. **Verify Success**
