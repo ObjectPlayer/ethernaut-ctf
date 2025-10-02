@@ -22,6 +22,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `GatekeeperOne.sol`: The challenge contract
     - `GatekeeperOneExploit.sol`: Original exploit solution
     - `AlternateExploit.sol`: Alternative exploit using assembly
+  - `level-14-gatekeeper-2/`: GatekeeperTwo challenge contracts
+    - `GatekeeperTwo.sol`: The challenge contract
+    - `GatekeeperTwoExploit.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -47,6 +50,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `130-deploy-gatekeeper-one.ts`: Deploys the Level 13 GatekeeperOne contract
   - `131-deploy-gatekeeper-one-solution.ts`: Deploys the GatekeeperOneExploit solution contract
   - `132-deploy-alternate-exploit.ts`: Deploys the AlternateExploit solution contract
+  - `140-deploy-gatekeeper-two.ts`: Deploys the Level 14 GatekeeperTwo contract
+  - `141-deploy-gatekeeper-two-solution.ts`: Deploys the GatekeeperTwoExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -82,6 +87,10 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `find-gas-offset.ts`: Methodically search for working gas values
     - `calibrate-gas.ts`: Calculate potential working gas values
     - `alternate-exploit.ts`: Use the alternate exploit contract approach
+  - `level-14-gatekeeper-2/`: Scripts for the GatekeeperTwo challenge
+    - `deploy-gatekeeper-two.ts`: Deploys the GatekeeperTwo contract
+    - `deploy-gatekeeper-two-exploit.ts`: Deploys the GatekeeperTwoExploit contract
+    - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -100,6 +109,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-11-elevator.md`: Documentation for the Elevator challenge
   - `level-12-privacy.md`: Documentation for the Privacy challenge
   - `level-13-gatekeeper-one.md`: Documentation for the GatekeeperOne challenge
+  - `level-14-gatekeeper-two.md`: Documentation for the GatekeeperTwo challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -194,6 +204,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 11: Elevator](./docs/level-11-elevator.md)
 - [Level 12: Privacy](./docs/level-12-privacy.md)
 - [Level 13: GatekeeperOne](./docs/level-13-gatekeeper-one.md)
+- [Level 14: GatekeeperTwo](./docs/level-14-gatekeeper-two.md)
 
 ## Challenge Summaries
 
@@ -286,6 +297,10 @@ The solution involves three key elements:
 
 Multiple approaches are provided, with the `simple-exploit.ts` script being the most reliable solution. This challenge demonstrates the importance of understanding low-level Ethereum concepts including gas optimization, type conversions, and memory layout.
 
+### GatekeeperTwo Challenge Summary
+
+The GatekeeperTwo challenge also has three gates but with different mechanics. The solution exploits the fact that during a contract's constructor execution, its code size is zero. It also requires crafting a key using XOR operations to pass the third gate. This challenge demonstrates understanding of contract lifecycle, assembly operations, and bitwise manipulation.
+
 ## Other Useful Commands
 
 ```shell
@@ -293,4 +308,3 @@ npx hardhat help
 npx hardhat test
 REPORT_GAS=true npx hardhat test
 npx hardhat node
-```
