@@ -25,6 +25,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-14-gatekeeper-2/`: GatekeeperTwo challenge contracts
     - `GatekeeperTwo.sol`: The challenge contract
     - `GatekeeperTwoExploit.sol`: The exploit solution
+  - `level-15-naught-coin/`: NaughtCoin challenge contracts
+    - `NaughtCoin.sol`: The challenge contract
+    - `NaughtCoinExploit.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -52,6 +55,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `132-deploy-alternate-exploit.ts`: Deploys the AlternateExploit solution contract
   - `140-deploy-gatekeeper-two.ts`: Deploys the Level 14 GatekeeperTwo contract
   - `141-deploy-gatekeeper-two-solution.ts`: Deploys the GatekeeperTwoExploit solution contract
+  - `150-deploy-naught-coin.ts`: Deploys the Level 15 NaughtCoin contract
+  - `151-deploy-naught-coin-solution.ts`: Deploys the NaughtCoinExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -89,6 +94,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `alternate-exploit.ts`: Use the alternate exploit contract approach
   - `level-14-gatekeeper-2/`: Scripts for the GatekeeperTwo challenge
     - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
+  - `level-15-naught-coin/`: Scripts for the NaughtCoin challenge
+    - `execute-naught-coin-exploit.ts`: Executes the NaughtCoin exploit
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -108,6 +115,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-12-privacy.md`: Documentation for the Privacy challenge
   - `level-13-gatekeeper-one.md`: Documentation for the GatekeeperOne challenge
   - `level-14-gatekeeper-two.md`: Documentation for the GatekeeperTwo challenge
+  - `level-15-naught-coin.md`: Documentation for the NaughtCoin challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -203,6 +211,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 12: Privacy](./docs/level-12-privacy.md)
 - [Level 13: GatekeeperOne](./docs/level-13-gatekeeper-one.md)
 - [Level 14: GatekeeperTwo](./docs/level-14-gatekeeper-two.md)
+- [Level 15: NaughtCoin](./docs/level-15-naught-coin.md)
 
 ## Challenge Summaries
 
@@ -298,6 +307,10 @@ Multiple approaches are provided, with the `simple-exploit.ts` script being the 
 ### GatekeeperTwo Challenge Summary
 
 The GatekeeperTwo challenge also has three gates but with different mechanics. The solution exploits the fact that during a contract's constructor execution, its code size is zero. It also requires crafting a key using XOR operations to pass the third gate. This challenge demonstrates understanding of contract lifecycle, assembly operations, and bitwise manipulation.
+
+### NaughtCoin Challenge Summary
+
+The NaughtCoin challenge involves a custom ERC20 token with a timelock that prevents the token holder from transferring tokens for 10 years. The vulnerability stems from the incomplete access control implementation. While the contract overrides the `transfer` function with a timelock modifier, it doesn't restrict other token movement functions like `transferFrom`. The solution demonstrates the importance of understanding inheritance patterns and implementing comprehensive access controls across all related functions in a contract. The exploit contract uses the `transferFrom` function to move tokens from the player to itself, effectively bypassing the timelock restriction.
 
 ## Other Useful Commands
 
