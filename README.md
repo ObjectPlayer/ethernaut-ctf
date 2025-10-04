@@ -27,7 +27,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `GatekeeperTwoExploit.sol`: The exploit solution
   - `level-15-naught-coin/`: NaughtCoin challenge contracts
     - `NaughtCoin.sol`: The challenge contract
-    - `solution/NaughtCoinExploit.sol`: The exploit solution
+    - `NaughtCoinExploit.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -96,7 +96,6 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
   - `level-15-naught-coin/`: Scripts for the NaughtCoin challenge
     - `execute-naught-coin-exploit.ts`: Executes the NaughtCoin exploit
-    - `verify-exploit-success.ts`: Verifies the success of the NaughtCoin exploit
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
