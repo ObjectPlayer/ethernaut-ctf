@@ -28,6 +28,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-15-naught-coin/`: NaughtCoin challenge contracts
     - `NaughtCoin.sol`: The challenge contract
     - `NaughtCoinExploit.sol`: The exploit solution
+  - `level-16-preservation/`: Preservation challenge contracts
+    - `Preservation.sol`: The challenge contract
+    - `PreservationExploit.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -57,6 +60,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `141-deploy-gatekeeper-two-solution.ts`: Deploys the GatekeeperTwoExploit solution contract
   - `150-deploy-naught-coin.ts`: Deploys the Level 15 NaughtCoin contract
   - `151-deploy-naught-coin-solution.ts`: Deploys the NaughtCoinExploit solution contract
+  - `160-deploy-preservation.ts`: Deploys the Level 16 Preservation contract
+  - `161-deploy-preservation-solution.ts`: Deploys the PreservationExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -96,6 +101,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
   - `level-15-naught-coin/`: Scripts for the NaughtCoin challenge
     - `execute-naught-coin-exploit.ts`: Executes the NaughtCoin exploit
+  - `level-16-preservation/`: Scripts for the Preservation challenge
+    - `execute-preservation-exploit.ts`: Executes the Preservation exploit to take ownership
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -116,6 +123,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-13-gatekeeper-one.md`: Documentation for the GatekeeperOne challenge
   - `level-14-gatekeeper-two.md`: Documentation for the GatekeeperTwo challenge
   - `level-15-naught-coin.md`: Documentation for the NaughtCoin challenge
+  - `level-16-preservation.md`: Documentation for the Preservation challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -212,6 +220,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 13: GatekeeperOne](./docs/level-13-gatekeeper-one.md)
 - [Level 14: GatekeeperTwo](./docs/level-14-gatekeeper-two.md)
 - [Level 15: NaughtCoin](./docs/level-15-naught-coin.md)
+- [Level 16: Preservation](./docs/level-16-preservation.md)
 
 ## Challenge Summaries
 
@@ -311,6 +320,10 @@ The GatekeeperTwo challenge also has three gates but with different mechanics. T
 ### NaughtCoin Challenge Summary
 
 The NaughtCoin challenge involves a custom ERC20 token with a timelock that prevents the token holder from transferring tokens for 10 years. The vulnerability stems from the incomplete access control implementation. While the contract overrides the `transfer` function with a timelock modifier, it doesn't restrict other token movement functions like `transferFrom`. The solution demonstrates the importance of understanding inheritance patterns and implementing comprehensive access controls across all related functions in a contract. The exploit contract uses the `transferFrom` function to move tokens from the player to itself, effectively bypassing the timelock restriction.
+
+### Preservation Challenge Summary
+
+The Preservation challenge focuses on the security implications of using `delegatecall` in Ethereum smart contracts. The vulnerability arises from a storage layout mismatch between the Preservation contract and the library contracts it calls via `delegatecall`. Since `delegatecall` preserves the storage context of the calling contract, this mismatch allows an attacker to overwrite critical storage variables including the contract's owner. The solution involves creating a malicious library with a matching storage layout and exploiting the delegatecall to modify the owner variable. This challenge highlights the importance of understanding storage layout when using delegatecall and the risks associated with upgradeable contract patterns.
 
 ## Other Useful Commands
 
