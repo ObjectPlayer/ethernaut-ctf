@@ -31,6 +31,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-16-preservation/`: Preservation challenge contracts
     - `Preservation.sol`: The challenge contract
     - `PreservationExploit.sol`: The exploit solution
+  - `level-17-recovery/`: Recovery challenge contracts
+    - `Recovery.sol`: The challenge contract
+    - `RecoveryExploit.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -62,6 +65,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `151-deploy-naught-coin-solution.ts`: Deploys the NaughtCoinExploit solution contract
   - `160-deploy-preservation.ts`: Deploys the Level 16 Preservation contract
   - `161-deploy-preservation-solution.ts`: Deploys the PreservationExploit solution contract
+  - `170-deploy-recovery.ts`: Deploys the Level 17 Recovery contract
+  - `171-deploy-recovery-solution.ts`: Deploys the RecoveryExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -102,7 +107,11 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-15-naught-coin/`: Scripts for the NaughtCoin challenge
     - `execute-naught-coin-exploit.ts`: Executes the NaughtCoin exploit
   - `level-16-preservation/`: Scripts for the Preservation challenge
+    - `deploy-preservation-instance.ts`: Deploys the Preservation contract and libraries
+    - `deploy-preservation-solution.ts`: Deploys the PreservationExploit solution contract
     - `execute-preservation-exploit.ts`: Executes the Preservation exploit to take ownership
+  - `level-17-recovery/`: Scripts for the Recovery challenge
+    - `execute-recovery-exploit.ts`: Executes the Recovery exploit to recover lost funds
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -124,6 +133,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-14-gatekeeper-two.md`: Documentation for the GatekeeperTwo challenge
   - `level-15-naught-coin.md`: Documentation for the NaughtCoin challenge
   - `level-16-preservation.md`: Documentation for the Preservation challenge
+  - `level-17-recovery.md`: Documentation for the Recovery challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -221,6 +231,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 14: GatekeeperTwo](./docs/level-14-gatekeeper-two.md)
 - [Level 15: NaughtCoin](./docs/level-15-naught-coin.md)
 - [Level 16: Preservation](./docs/level-16-preservation.md)
+- [Level 17: Recovery](./docs/level-17-recovery.md)
 
 ## Challenge Summaries
 
@@ -324,6 +335,10 @@ The NaughtCoin challenge involves a custom ERC20 token with a timelock that prev
 ### Preservation Challenge Summary
 
 The Preservation challenge focuses on the security implications of using `delegatecall` in Ethereum smart contracts. The vulnerability arises from a storage layout mismatch between the Preservation contract and the library contracts it calls via `delegatecall`. Since `delegatecall` preserves the storage context of the calling contract, this mismatch allows an attacker to overwrite critical storage variables including the contract's owner. The solution involves creating a malicious library with a matching storage layout and exploiting the delegatecall to modify the owner variable. This challenge highlights the importance of understanding storage layout when using delegatecall and the risks associated with upgradeable contract patterns.
+
+### Recovery Challenge Summary
+
+The Recovery challenge tests your understanding of how contract addresses are generated in Ethereum. After a token factory contract creates a token and someone sends it 0.001 ETH, the address of the token contract is lost. The challenge is to recover the lost ETH by computing the address of the token contract based on the deterministic contract creation formula in Ethereum (using the creator's address and nonce). Once the address is calculated, you can call the token's self-destruct function to recover the ETH. This challenge demonstrates the importance of understanding Ethereum's deterministic address generation and the implications of having permissionless destruction functions in contracts.
 
 ## Other Useful Commands
 
