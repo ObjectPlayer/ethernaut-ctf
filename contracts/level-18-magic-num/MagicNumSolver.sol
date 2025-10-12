@@ -2,9 +2,10 @@
 pragma solidity ^0.8.0;
 
 contract MagicNumSolver {
+    address public solver;
     // This contract deploys a bytecode contract with size <= 10 bytes that returns 42 (0x2a)
     
-    function deploy() public returns (address) {
+    function deploy() public {
         // Runtime code (10 bytes): returns 42 (0x2a) when whatIsTheMeaningOfLife() is called
         // PUSH1 0x2a (the answer, 42): 602a
         // PUSH1 0x00 (memory position): 6000
@@ -23,14 +24,14 @@ contract MagicNumSolver {
         // RETURN (return memory from position 22, size 10 bytes): f3
         
         bytes memory bytecode = hex"69602a60005260206000f3600052600a6016f3";
-        address solver;
+        address _solver;
 
         assembly {
-            solver := create(0, add(bytecode, 0x20), mload(bytecode))
+            _solver := create(0, add(bytecode, 0x20), mload(bytecode))
         }
 
-        require(solver != address(0), "Failed to deploy contract");
-        return solver;
+        require(_solver != address(0), "Failed to deploy contract");
+        solver = _solver;
     }
 
     // This function will help us verify that the deployed contract works correctly
