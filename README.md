@@ -240,6 +240,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 15: NaughtCoin](./docs/level-15-naught-coin.md)
 - [Level 16: Preservation](./docs/level-16-preservation.md)
 - [Level 17: Recovery](./docs/level-17-recovery.md)
+- [Level 18: MagicNum](./docs/level-18-magic-num.md)
 
 ## Challenge Summaries
 
@@ -347,6 +348,11 @@ The Preservation challenge focuses on the security implications of using `delega
 ### Recovery Challenge Summary
 
 The Recovery challenge tests your understanding of how contract addresses are generated in Ethereum. After a token factory contract creates a token and someone sends it 0.001 ETH, the address of the token contract is lost. The challenge is to recover the lost ETH by computing the address of the token contract based on the deterministic contract creation formula in Ethereum (using the creator's address and nonce). Once the address is calculated, you can call the token's self-destruct function to recover the ETH. This challenge demonstrates the importance of understanding Ethereum's deterministic address generation and the implications of having permissionless destruction functions in contracts.
+
+### MagicNum Challenge Summary
+
+The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
+The solution contract (`MagicNumSolver`) uses the same algorithm to predict the outcome and make the correct guess.
 
 ## Other Useful Commands
 
