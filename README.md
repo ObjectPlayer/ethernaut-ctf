@@ -34,6 +34,9 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-17-recovery/`: Recovery challenge contracts
     - `Recovery.sol`: The challenge contract
     - `RecoveryExploit.sol`: The exploit solution
+  - `level-18-magic-num/`: MagicNum challenge contracts
+    - `MagicNum.sol`: The challenge contract
+    - `MagicNumSolver.sol`: The exploit solution
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -67,6 +70,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `161-deploy-preservation-solution.ts`: Deploys the PreservationExploit solution contract
   - `170-deploy-recovery.ts`: Deploys the Level 17 Recovery contract
   - `171-deploy-recovery-solution.ts`: Deploys the RecoveryExploit solution contract
+  - `180-deploy-magic-num.ts`: Deploys the Level 18 MagicNum contract
+  - `181-deploy-magicnum-solution.ts`: Deploys the MagicNumSolver solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
     - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
@@ -112,6 +117,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
     - `execute-preservation-exploit.ts`: Executes the Preservation exploit to take ownership
   - `level-17-recovery/`: Scripts for the Recovery challenge
     - `execute-recovery-exploit.ts`: Executes the Recovery exploit to recover lost funds
+  - `level-18-magic-num/`: Scripts for the MagicNum challenge
+    - `execute-magic-num-exploit.ts`: Executes the MagicNum solution to deploy a minimal bytecode contract
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -134,6 +141,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-15-naught-coin.md`: Documentation for the NaughtCoin challenge
   - `level-16-preservation.md`: Documentation for the Preservation challenge
   - `level-17-recovery.md`: Documentation for the Recovery challenge
+  - `level-18-magic-num.md`: Documentation for the MagicNum challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -232,6 +240,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 15: NaughtCoin](./docs/level-15-naught-coin.md)
 - [Level 16: Preservation](./docs/level-16-preservation.md)
 - [Level 17: Recovery](./docs/level-17-recovery.md)
+- [Level 18: MagicNum](./docs/level-18-magic-num.md)
 
 ## Challenge Summaries
 
@@ -339,6 +348,11 @@ The Preservation challenge focuses on the security implications of using `delega
 ### Recovery Challenge Summary
 
 The Recovery challenge tests your understanding of how contract addresses are generated in Ethereum. After a token factory contract creates a token and someone sends it 0.001 ETH, the address of the token contract is lost. The challenge is to recover the lost ETH by computing the address of the token contract based on the deterministic contract creation formula in Ethereum (using the creator's address and nonce). Once the address is calculated, you can call the token's self-destruct function to recover the ETH. This challenge demonstrates the importance of understanding Ethereum's deterministic address generation and the implications of having permissionless destruction functions in contracts.
+
+### MagicNum Challenge Summary
+
+The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
+The solution contract (`MagicNumSolver`) uses the same algorithm to predict the outcome and make the correct guess.
 
 ## Other Useful Commands
 
