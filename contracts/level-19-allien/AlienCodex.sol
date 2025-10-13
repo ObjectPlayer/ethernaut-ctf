@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.5.0;
 
-import "../helpers/Ownable-05.sol";
+contract Ownable {
+    address public owner;
+    constructor() public {
+        owner = msg.sender;
+    }
+}
 
 contract AlienCodex is Ownable {
     bool public contact;

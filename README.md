@@ -24,6 +24,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-16-preservation/`: Preservation challenge contracts
   - `level-17-recovery/`: Recovery challenge contracts
   - `level-18-magic-num/`: MagicNum challenge contracts
+  - `level-19-allien/`: AlienCodex challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -59,6 +60,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `171-deploy-recovery-solution.ts`: Deploys the RecoveryExploit solution contract
   - `180-deploy-magic-num.ts`: Deploys the Level 18 MagicNum contract
   - `181-deploy-magicnum-solution.ts`: Deploys the MagicNumSolver solution contract
+  - `190-deploy-alien-codex.ts`: Deploys the Level 19 AlienCodex contract
+  - `191-deploy-alien-codex-solution.ts`: Deploys the AlienCodexExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -79,6 +82,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-16-preservation/`: Scripts for the Preservation challenge
   - `level-17-recovery/`: Scripts for the Recovery challenge
   - `level-18-magic-num/`: Scripts for the MagicNum challenge
+  - `level-19-alien-codex/`: Scripts for the AlienCodex challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -201,6 +205,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 16: Preservation](./docs/level-16-preservation.md)
 - [Level 17: Recovery](./docs/level-17-recovery.md)
 - [Level 18: MagicNum](./docs/level-18-magic-num.md)
+- [Level 19: AlienCodex](./docs/level-19-alien-codex.md)
 
 ## Challenge Summaries
 
@@ -311,8 +316,11 @@ The Recovery challenge tests your understanding of how contract addresses are ge
 
 ### MagicNum Challenge Summary
 
-The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
-The solution contract (`MagicNumSolver`) uses the same algorithm to predict the outcome and make the correct guess.
+The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The solution involves understanding EVM opcodes and crafting minimal bytecode that can return 42 when called. The `MagicNumSolver` contract deploys this minimal bytecode contract using low-level assembly. This challenge teaches about EVM bytecode optimization and contract creation mechanics.
+
+### AlienCodex Challenge Summary
+
+The AlienCodex challenge requires claiming ownership of an alien contract. The vulnerability lies in the array length underflow in Solidity 0.5.0 (which doesn't have overflow protection). By causing the array length to underflow, we can access any storage slot in the contract. The solution exploits this to overwrite the owner address stored in slot 0. This challenge demonstrates the importance of understanding contract storage layout and the risks of unchecked arithmetic operations in older Solidity versions.
 
 ## Other Useful Commands
 
