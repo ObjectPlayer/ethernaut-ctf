@@ -106,6 +106,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-16-preservation.md`: Documentation for the Preservation challenge
   - `level-17-recovery.md`: Documentation for the Recovery challenge
   - `level-18-magic-num.md`: Documentation for the MagicNum challenge
+  - `level-19-alien-codex.md`: Documentation for the AlienCodex challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
