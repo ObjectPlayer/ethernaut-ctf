@@ -19,24 +19,12 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-11-elevator/`: Elevator challenge contracts
   - `level-12-privacy/`: Privacy challenge contracts
   - `level-13-gatekeeper-1/`: GatekeeperOne challenge contracts
-    - `GatekeeperOne.sol`: The challenge contract
-    - `GatekeeperOneExploit.sol`: Original exploit solution
-    - `AlternateExploit.sol`: Alternative exploit using assembly
   - `level-14-gatekeeper-2/`: GatekeeperTwo challenge contracts
-    - `GatekeeperTwo.sol`: The challenge contract
-    - `GatekeeperTwoExploit.sol`: The exploit solution
   - `level-15-naught-coin/`: NaughtCoin challenge contracts
-    - `NaughtCoin.sol`: The challenge contract
-    - `NaughtCoinExploit.sol`: The exploit solution
   - `level-16-preservation/`: Preservation challenge contracts
-    - `Preservation.sol`: The challenge contract
-    - `PreservationExploit.sol`: The exploit solution
   - `level-17-recovery/`: Recovery challenge contracts
-    - `Recovery.sol`: The challenge contract
-    - `RecoveryExploit.sol`: The exploit solution
   - `level-18-magic-num/`: MagicNum challenge contracts
-    - `MagicNum.sol`: The challenge contract
-    - `MagicNumSolver.sol`: The exploit solution
+  - `level-19-allien/`: AlienCodex challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -72,53 +60,29 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `171-deploy-recovery-solution.ts`: Deploys the RecoveryExploit solution contract
   - `180-deploy-magic-num.ts`: Deploys the Level 18 MagicNum contract
   - `181-deploy-magicnum-solution.ts`: Deploys the MagicNumSolver solution contract
+  - `190-deploy-alien-codex.ts`: Deploys the Level 19 AlienCodex contract
+  - `191-deploy-alien-codex-solution.ts`: Deploys the AlienCodexExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
-    - `solve-hello-ethernaut.ts`: Solves the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
-    - `solve-fallback.ts`: Solves the Fallback challenge
   - `level-02-fallout/`: Scripts for the Fallout challenge
-    - `solve-fallout.ts`: Solves the Fallout challenge
   - `level-03-coinflip/`: Scripts for the CoinFlip challenge
-    - `execute-coin-flip-guess.ts`: Executes the CoinFlip solution
   - `level-04-telephone/`: Scripts for the Telephone challenge
-    - `execute-telephone-call.ts`: Executes the Telephone solution
   - `level-05-token/`: Scripts for the Token challenge
-    - `execute-token-claim.ts`: Executes the Token solution
   - `level-06-delegation/`: Scripts for the Delegation challenge
-    - `execute-delegation-exploit.ts`: Executes the Delegation solution
   - `level-07-force/`: Scripts for the Force challenge
-    - `execute-force-exploit.ts`: Executes the Force solution
   - `level-08-vault/`: Scripts for the Vault challenge
-    - `read-vault-password.ts`: Reads the private password and unlocks the vault
   - `level-09-king/`: Scripts for the King challenge
-    - `claim-throne.ts`: Deploys the KingExploit contract and claims the throne
   - `level-10-reentrancy/`: Scripts for the Reentrancy challenge
-    - `execute-reentrance-exploit.ts`: Executes the reentrancy attack on the Reentrance contract
   - `level-11-elevator/`: Scripts for the Elevator challenge
-    - `execute-elevator-exploit.ts`: Executes the elevator exploit to reach the top floor
   - `level-12-privacy/`: Scripts for the Privacy challenge
-    - `execute-privacy-exploit.ts`: Executes the privacy exploit to unlock the contract using the PrivacyExploit contract
-    - `read-privacy-key.ts`: Directly reads the key from storage and unlocks the contract
   - `level-13-gatekeeper-1/`: Scripts for the GatekeeperOne challenge
-    - `execute-gatekeeper-one-exploit.ts`: Original script to execute the GatekeeperOne exploit
-    - `simple-exploit.ts`: Simplified, reliable exploit script (recommended)
-    - `direct-exploit.ts`: Execute exploit with a specific gas value
-    - `find-gas-offset.ts`: Methodically search for working gas values
-    - `calibrate-gas.ts`: Calculate potential working gas values
-    - `alternate-exploit.ts`: Use the alternate exploit contract approach
   - `level-14-gatekeeper-2/`: Scripts for the GatekeeperTwo challenge
-    - `verify-exploit-success.ts`: Verifies the success of the GatekeeperTwo exploit
   - `level-15-naught-coin/`: Scripts for the NaughtCoin challenge
-    - `execute-naught-coin-exploit.ts`: Executes the NaughtCoin exploit
   - `level-16-preservation/`: Scripts for the Preservation challenge
-    - `deploy-preservation-instance.ts`: Deploys the Preservation contract and libraries
-    - `deploy-preservation-solution.ts`: Deploys the PreservationExploit solution contract
-    - `execute-preservation-exploit.ts`: Executes the Preservation exploit to take ownership
   - `level-17-recovery/`: Scripts for the Recovery challenge
-    - `execute-recovery-exploit.ts`: Executes the Recovery exploit to recover lost funds
   - `level-18-magic-num/`: Scripts for the MagicNum challenge
-    - `execute-magic-num-exploit.ts`: Executes the MagicNum solution to deploy a minimal bytecode contract
+  - `level-19-alien-codex/`: Scripts for the AlienCodex challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -142,6 +106,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-16-preservation.md`: Documentation for the Preservation challenge
   - `level-17-recovery.md`: Documentation for the Recovery challenge
   - `level-18-magic-num.md`: Documentation for the MagicNum challenge
+  - `level-19-alien-codex.md`: Documentation for the AlienCodex challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -241,6 +206,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 16: Preservation](./docs/level-16-preservation.md)
 - [Level 17: Recovery](./docs/level-17-recovery.md)
 - [Level 18: MagicNum](./docs/level-18-magic-num.md)
+- [Level 19: AlienCodex](./docs/level-19-alien-codex.md)
 
 ## Challenge Summaries
 
@@ -351,8 +317,11 @@ The Recovery challenge tests your understanding of how contract addresses are ge
 
 ### MagicNum Challenge Summary
 
-The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The vulnerability lies in the pseudorandom number generation that uses the previous block hash, which is predictable.
-The solution contract (`MagicNumSolver`) uses the same algorithm to predict the outcome and make the correct guess.
+The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with bytecode size <= 10 bytes. The solution involves understanding EVM opcodes and crafting minimal bytecode that can return 42 when called. The `MagicNumSolver` contract deploys this minimal bytecode contract using low-level assembly. This challenge teaches about EVM bytecode optimization and contract creation mechanics.
+
+### AlienCodex Challenge Summary
+
+The AlienCodex challenge requires claiming ownership of an alien contract. The vulnerability lies in the array length underflow in Solidity 0.5.0 (which doesn't have overflow protection). By causing the array length to underflow, we can access any storage slot in the contract. The solution exploits this to overwrite the owner address stored in slot 0. This challenge demonstrates the importance of understanding contract storage layout and the risks of unchecked arithmetic operations in older Solidity versions.
 
 ## Other Useful Commands
 
