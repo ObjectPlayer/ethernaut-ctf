@@ -25,6 +25,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-17-recovery/`: Recovery challenge contracts
   - `level-18-magic-num/`: MagicNum challenge contracts
   - `level-19-allien/`: AlienCodex challenge contracts
+  - `level-20-denial/`: Denial challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -62,6 +63,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `181-deploy-magicnum-solution.ts`: Deploys the MagicNumSolver solution contract
   - `190-deploy-alien-codex.ts`: Deploys the Level 19 AlienCodex contract
   - `191-deploy-alien-codex-solution.ts`: Deploys the AlienCodexExploit solution contract
+  - `200-deploy-denial.ts`: Deploys the Level 20 Denial contract
+  - `201-deploy-denial-solution.ts`: Deploys the DenialExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -83,6 +86,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-17-recovery/`: Scripts for the Recovery challenge
   - `level-18-magic-num/`: Scripts for the MagicNum challenge
   - `level-19-alien-codex/`: Scripts for the AlienCodex challenge
+  - `level-20-denial/`: Scripts for the Denial challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -107,6 +111,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-17-recovery.md`: Documentation for the Recovery challenge
   - `level-18-magic-num.md`: Documentation for the MagicNum challenge
   - `level-19-alien-codex.md`: Documentation for the AlienCodex challenge
+  - `level-20-denial.md`: Documentation for the Denial challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -207,6 +212,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 17: Recovery](./docs/level-17-recovery.md)
 - [Level 18: MagicNum](./docs/level-18-magic-num.md)
 - [Level 19: AlienCodex](./docs/level-19-alien-codex.md)
+- [Level 20: Denial](./docs/level-20-denial.md)
 
 ## Challenge Summaries
 
@@ -322,6 +328,10 @@ The MagicNum challenge requires deploying a contract that returns 42 (0x2a) with
 ### AlienCodex Challenge Summary
 
 The AlienCodex challenge requires claiming ownership of an alien contract. The vulnerability lies in the array length underflow in Solidity 0.5.0 (which doesn't have overflow protection). By causing the array length to underflow, we can access any storage slot in the contract. The solution exploits this to overwrite the owner address stored in slot 0. This challenge demonstrates the importance of understanding contract storage layout and the risks of unchecked arithmetic operations in older Solidity versions.
+
+### Denial Challenge Summary
+
+The Denial challenge requires preventing the owner from withdrawing funds by performing a Denial of Service (DoS) attack. The vulnerability lies in the `withdraw()` function which uses `.call()` to send ETH to a partner contract, forwarding all available gas. By becoming a malicious withdraw partner with a gas-consuming `receive()` function (infinite loop), we can consume all gas and prevent the subsequent `owner.transfer()` from executing. This challenge demonstrates the dangers of forwarding all gas to untrusted contracts and the importance of using the pull-over-push pattern for payments.
 
 ## Other Useful Commands
 
