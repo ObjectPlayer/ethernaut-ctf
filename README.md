@@ -27,6 +27,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-allien/`: AlienCodex challenge contracts
   - `level-20-denial/`: Denial challenge contracts
   - `level-21-shop/`: Shop challenge contracts
+  - `level-22-dex/`: DEX challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -68,6 +69,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `201-deploy-denial-solution.ts`: Deploys the DenialExploit solution contract
   - `210-deploy-shop.ts`: Deploys the Level 21 Shop contract
   - `211-deploy-shop-solution.ts`: Deploys the ShopExploit solution contract
+  - `220-deploy-dex.ts`: Deploys the Level 22 DEX contract
+  - `221-deploy-dex-solution.ts`: Deploys the DexExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -91,6 +94,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-alien-codex/`: Scripts for the AlienCodex challenge
   - `level-20-denial/`: Scripts for the Denial challenge
   - `level-21-shop/`: Scripts for the Shop challenge
+  - `level-22-dex/`: Scripts for the DEX challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -117,6 +121,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-alien-codex.md`: Documentation for the AlienCodex challenge
   - `level-20-denial.md`: Documentation for the Denial challenge
   - `level-21-shop.md`: Documentation for the Shop challenge
+  - `level-22-dex.md`: Documentation for the DEX challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -219,6 +224,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 19: AlienCodex](./docs/level-19-alien-codex.md)
 - [Level 20: Denial](./docs/level-20-denial.md)
 - [Level 21: Shop](./docs/level-21-shop.md)
+- [Level 22: DEX](./docs/level-22-dex.md)
 
 ## Challenge Summaries
 
@@ -342,6 +348,11 @@ The Denial challenge requires preventing the owner from withdrawing funds by per
 ### Shop Challenge Summary
 
 The Shop challenge requires buying an item for less than the asking price. The vulnerability lies in the `buy()` function calling `_buyer.price()` twice - once to check if the price is acceptable and once to set the final price. Between these calls, the `isSold` state changes. Our exploit implements a `view` function that reads the Shop's `isSold` state and returns different values accordingly: returning 100 on the first call to pass the check, and returning 1 on the second call to buy cheap. This challenge teaches that view functions can have state-dependent behavior by reading external contract state, and emphasizes the importance of caching external call results.
+
+### DEX Challenge Summary
+
+The DEX challenge requires draining the tokens from the Dex using price manuplation as the pric formulla is unaccurate. The DEX uses a simple linear pricing formula without any constant, making it vulnerable to price manipulation.
+
 
 ## Other Useful Commands
 
