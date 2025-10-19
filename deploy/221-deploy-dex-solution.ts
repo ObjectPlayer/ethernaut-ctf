@@ -52,11 +52,11 @@ const deployDexSolution: DeployFunction = async function (hre: HardhatRuntimeEnv
     const token2Contract = await ethers.getContractAt("SwappableToken", token2Deployment.address);
     
     console.log("\nTransferring initial tokens to DexExploit contract...");
-    const transfer1Tx = await token1Contract.transfer(dexExploit.address, ethers.parseEther("10"));
+    const transfer1Tx = await token1Contract.transfer(dexExploit.address, 10);
     await transfer1Tx.wait();
     console.log("Transferred 10 token1 to DexExploit");
     
-    const transfer2Tx = await token2Contract.transfer(dexExploit.address, ethers.parseEther("10"));
+    const transfer2Tx = await token2Contract.transfer(dexExploit.address, 10);
     await transfer2Tx.wait();
     console.log("Transferred 10 token2 to DexExploit");
 
