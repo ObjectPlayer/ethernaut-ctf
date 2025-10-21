@@ -57,11 +57,11 @@ const deployDexTwoSolution: DeployFunction = async function (hre: HardhatRuntime
     const token2Contract = await ethers.getContractAt("SwappableTokenTwo", token2Deployment.address);
     
     console.log("\nTransferring initial tokens to DexTwoExploit contract...");
-    const transfer1Tx = await token1Contract.transfer(dexTwoExploit.address, ethers.parseEther("10"));
+    const transfer1Tx = await token1Contract.transfer(dexTwoExploit.address, 10);
     await transfer1Tx.wait();
     console.log("Transferred 10 token1 to DexTwoExploit");
     
-    const transfer2Tx = await token2Contract.transfer(dexTwoExploit.address, ethers.parseEther("10"));
+    const transfer2Tx = await token2Contract.transfer(dexTwoExploit.address, 10);
     await transfer2Tx.wait();
     console.log("Transferred 10 token2 to DexTwoExploit");
 
