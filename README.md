@@ -27,7 +27,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-allien/`: AlienCodex challenge contracts
   - `level-20-denial/`: Denial challenge contracts
   - `level-21-shop/`: Shop challenge contracts
-  - `level-22-dex/`: DEX challenge contracts
+  - `level-22-dex/`: Dex challenge contracts
+  - `level-23-dex2/`: DexTwo challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -69,8 +70,10 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `201-deploy-denial-solution.ts`: Deploys the DenialExploit solution contract
   - `210-deploy-shop.ts`: Deploys the Level 21 Shop contract
   - `211-deploy-shop-solution.ts`: Deploys the ShopExploit solution contract
-  - `220-deploy-dex.ts`: Deploys the Level 22 DEX contract
+  - `220-deploy-dex.ts`: Deploys the Level 22 Dex contract and tokens
   - `221-deploy-dex-solution.ts`: Deploys the DexExploit solution contract
+  - `230-deploy-dex-two.ts`: Deploys the Level 23 DexTwo contract and tokens
+  - `231-deploy-dex-two-solution.ts`: Deploys the DexTwoExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -94,7 +97,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-alien-codex/`: Scripts for the AlienCodex challenge
   - `level-20-denial/`: Scripts for the Denial challenge
   - `level-21-shop/`: Scripts for the Shop challenge
-  - `level-22-dex/`: Scripts for the DEX challenge
+  - `level-22-dex/`: Scripts for the Dex challenge
+  - `level-23-dex2/`: Scripts for the DexTwo challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -121,7 +125,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-19-alien-codex.md`: Documentation for the AlienCodex challenge
   - `level-20-denial.md`: Documentation for the Denial challenge
   - `level-21-shop.md`: Documentation for the Shop challenge
-  - `level-22-dex.md`: Documentation for the DEX challenge
+  - `level-22-dex.md`: Documentation for the Dex challenge
+  - `level-23-dex-two.md`: Documentation for the DexTwo challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -225,6 +230,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 20: Denial](./docs/level-20-denial.md)
 - [Level 21: Shop](./docs/level-21-shop.md)
 - [Level 22: DEX](./docs/level-22-dex.md)
+- [Level 23: DexTwo](./docs/level-23-dex-two.md)
 
 ## Challenge Summaries
 
@@ -352,6 +358,10 @@ The Shop challenge requires buying an item for less than the asking price. The v
 ### DEX Challenge Summary
 
 The DEX challenge requires draining the tokens from the Dex using price manuplation as the pric formulla is unaccurate. The DEX uses a simple linear pricing formula without any constant, making it vulnerable to price manipulation.
+
+### DEX2 Challenge Summary
+
+The DEX2 challenge requires draining the tokens from the Dex using milicios token, as there is no any check for tokens in the dex contract.
 
 
 ## Other Useful Commands
