@@ -7,6 +7,7 @@ import "dotenv/config";
 
 const RPC_ENDPOINT_SEPOLIA_NETWORK = process.env.RPC_URL_SEPOLIA_NETWORK;
 const PRIVATE_KEY_ACCOUNT_SEPOLIA = process.env.PRIVATE_KEY_SEPOLIA_NETWORK || "0x0000000000000000000000000000000000000000";
+const PRIVATE_KEY_ACCOUNT2_SEPOLIA = process.env.PRIVATE_KEY2_SEPOLIA_NETWORK || "0x0000000000000000000000000000000000000000";
 const API_KEY_ETHERSCAN = process.env.ETHERSCAN_API_KEY;
 const API_KEY_COINMARKET_CAP = process.env.COIN_MARKET_CAP_API_KEY;
 
@@ -43,7 +44,7 @@ const config: HardhatUserConfig = {
     },
     sepolia: {
       url: RPC_ENDPOINT_SEPOLIA_NETWORK,
-      accounts: [PRIVATE_KEY_ACCOUNT_SEPOLIA],
+      accounts: [PRIVATE_KEY_ACCOUNT_SEPOLIA, PRIVATE_KEY_ACCOUNT2_SEPOLIA],
       saveDeployments: true,
       chainId: 11155111,
     },
@@ -55,6 +56,9 @@ const config: HardhatUserConfig = {
     deployer: {
       default: 0,
     },
+    secondAccount: {
+      default: 1
+    }
   },
 };
 

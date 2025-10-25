@@ -29,6 +29,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-21-shop/`: Shop challenge contracts
   - `level-22-dex/`: Dex challenge contracts
   - `level-23-dex2/`: DexTwo challenge contracts
+  - `level-24-puzzle-wallet/`: Puzzle Wallet challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -74,6 +75,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `221-deploy-dex-solution.ts`: Deploys the DexExploit solution contract
   - `230-deploy-dex-two.ts`: Deploys the Level 23 DexTwo contract and tokens
   - `231-deploy-dex-two-solution.ts`: Deploys the DexTwoExploit solution contract
+  - `240-deploy-puzzle-wallet.ts`: Deploys the Level 24 PuzzleWallet proxy and implementation
+  - `241-deploy-puzzle-wallet-solution.ts`: Deploys the PuzzleWalletExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -99,6 +102,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-21-shop/`: Scripts for the Shop challenge
   - `level-22-dex/`: Scripts for the Dex challenge
   - `level-23-dex2/`: Scripts for the DexTwo challenge
+  - `level-24-puzzle-wallet/`: Scripts for the Puzzle Wallet challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -127,6 +131,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-21-shop.md`: Documentation for the Shop challenge
   - `level-22-dex.md`: Documentation for the Dex challenge
   - `level-23-dex-two.md`: Documentation for the DexTwo challenge
+  - `level-24-puzzle-wallet.md`: Documentation for the Puzzle Wallet challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -231,6 +236,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 21: Shop](./docs/level-21-shop.md)
 - [Level 22: DEX](./docs/level-22-dex.md)
 - [Level 23: DexTwo](./docs/level-23-dex-two.md)
+- [Level 24: Puzzle Wallet](./docs/level-24-puzzle-wallet.md)
 
 ## Challenge Summaries
 
@@ -362,6 +368,10 @@ The DEX challenge requires draining the tokens from the Dex using price manuplat
 ### DEX2 Challenge Summary
 
 The DEX2 challenge requires draining the tokens from the Dex using milicios token, as there is no any check for tokens in the dex contract.
+
+### PuzzleWallet Challenge Summary
+
+The PuzzleWallet requires claiming ownership of the contract. The vulnerability lies in the `pendingAdmin` slot being writable by the owner, and the `admin` slot being writable by the pendingAdmin. By proposing a new admin and then exploiting the delegatecall vulnerability in the `setMaxBalance` function, we can overwrite the `admin` slot with our address, making us the owner.
 
 
 ## Other Useful Commands
