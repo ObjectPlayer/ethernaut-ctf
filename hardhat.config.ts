@@ -15,21 +15,29 @@ const config: HardhatUserConfig = {
   solidity: {
     compilers: [
       {
+        version: "0.8.22",
+      },
+      {
+        version: "0.8.21",
+      },
+      {
+        version: "0.8.20",
+      },
+      {
         version: "0.8.19",
       },
       {
         version: "0.8.12",
       },
       {
-        version: "0.6.1",
+        version: "0.6.12",
       },
       {
-        version: "0.6.12",
+        version: "0.6.1",
       },
       {
         version: "0.5.0",
       }
-
     ],
   },
   defaultNetwork: "hardhat",
