@@ -11,6 +11,7 @@ interface IForta {
     function raiseAlert(address user) external;
 }
 
+
 /**
  * @title DoubleEntryPointDetectionBot
  * @dev Detection bot to protect CryptoVault from being drained via LegacyToken
