@@ -5,10 +5,12 @@ interface IDetectionBot {
     function handleTransaction(address user, bytes calldata msgData) external;
 }
 
-interface IForta {
+interface IIForta {
     function setDetectionBot(address detectionBotAddress) external;
     function notify(address user, bytes calldata msgData) external;
     function raiseAlert(address user) external;
+    function usersDetectionBots(address user) external view returns (IDetectionBot);
+    
 }
 
 
@@ -29,7 +31,7 @@ interface IForta {
  */
 contract DoubleEntryPointDetectionBot is IDetectionBot {
     address public cryptoVault;
-    IForta public forta;
+    IIForta public forta;
     
     /**
      * @dev Constructor to set the CryptoVault and Forta addresses
@@ -38,7 +40,7 @@ contract DoubleEntryPointDetectionBot is IDetectionBot {
      */
     constructor(address _cryptoVault, address _forta) {
         cryptoVault = _cryptoVault;
-        forta = IForta(_forta);
+        forta = IIForta(_forta);
     }
     
     /**
@@ -58,10 +60,16 @@ contract DoubleEntryPointDetectionBot is IDetectionBot {
         // origSender is the 3rd parameter, starting at byte 68
         address origSender;
         
-        // Extract origSender from calldata (bytes 68-99, but address is last 20 bytes)
+        // Extract origSender from msgData
+        // msgData[0:4] = function selector
+        // msgData[4:36] = to address (32 bytes)
+        // msgData[36:68] = value (32 bytes)
+        // msgData[68:100] = origSender (32 bytes)
         assembly {
-            // Load the word at position 68 (skip 4 bytes selector + 32 bytes 'to' + 32 bytes 'value')
-            origSender := calldataload(0x44) // 0x44 = 68 in decimal
+            // Load origSender from msgData at offset 68
+            // msgData.offset gives us the start of msgData in calldata
+            // Add 68 to skip selector (4) + to (32) + value (32)
+            origSender := calldataload(add(msgData.offset, 68))
         }
         
         // If the origSender is the CryptoVault, raise an alert
