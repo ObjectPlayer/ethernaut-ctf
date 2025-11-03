@@ -31,6 +31,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-23-dex2/`: DexTwo challenge contracts
   - `level-24-puzzle-wallet/`: Puzzle Wallet challenge contracts
   - `level-25-motorbike/`: Motorbike challenge contracts
+  - `level-26-double-entry-point/`: Double Entry Point challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -80,6 +81,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `241-deploy-puzzle-wallet-solution.ts`: Deploys the PuzzleWalletExploit solution contract
   - `250-deploy-motorbike.ts`: Deploys the Level 25 Motorbike proxy and Engine implementation
   - `251-deploy-motorbike-solution.ts`: Deploys the MotorbikeExploit solution contract
+  - `260-deploy-double-entry-point.ts`: Deploys the Level 26 DoubleEntryPoint contract
+  - `261-deploy-double-entry-point-solution.ts`: Deploys the DoubleEntryPointSolution solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -107,6 +110,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-23-dex2/`: Scripts for the DexTwo challenge
   - `level-24-puzzle-wallet/`: Scripts for the Puzzle Wallet challenge
   - `level-25-motorbike/`: Scripts for the Motorbike challenge
+  - `level-26-double-entry-point/`: Scripts for the DoubleEntryPoint challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -137,6 +141,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-23-dex-two.md`: Documentation for the DexTwo challenge
   - `level-24-puzzle-wallet.md`: Documentation for the Puzzle Wallet challenge
   - `level-25-motorbike.md`: Documentation for the Motorbike challenge
+  - `level-26-double-entry-point.md`: Documentation for the DoubleEntryPoint challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -243,6 +248,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 23: DexTwo](./docs/level-23-dex-two.md)
 - [Level 24: Puzzle Wallet](./docs/level-24-puzzle-wallet.md)
 - [Level 25: Motorbike](./docs/level-25-motorbike.md)
+- [Level 26: DoubleEntryPoint](./docs/level-26-double-entry-point.md)
 
 ## Challenge Summaries
 
@@ -379,6 +385,13 @@ The DEX2 challenge requires draining the tokens from the Dex using milicios toke
 
 The PuzzleWallet requires claiming ownership of the contract. The vulnerability lies in the `pendingAdmin` slot being writable by the owner, and the `admin` slot being writable by the pendingAdmin. By proposing a new admin and then exploiting the delegatecall vulnerability in the `setMaxBalance` function, we can overwrite the `admin` slot with our address, making us the owner.
 
+### Motorbike Challenge Summary
+
+The Motorbike challenge requires claiming ownership of the contract. The vulnerability lies in the `pendingAdmin` slot being writable by the owner, and the `admin` slot being writable by the pendingAdmin. By proposing a new admin and then exploiting the delegatecall vulnerability in the `setMaxBalance` function, we can overwrite the `admin` slot with our address, making us the owner.
+
+### DoubleEntryPoint Challenge Summary
+
+The DoubleEntryPoint challenge requires claiming ownership of the contract. The vulnerability lies in the `pendingAdmin` slot being writable by the owner, and the `admin` slot being writable by the pendingAdmin. By proposing a new admin and then exploiting the delegatecall vulnerability in the `setMaxBalance` function, we can overwrite the `admin` slot with our address, making us the owner.
 
 ## Other Useful Commands
 
