@@ -26,10 +26,6 @@ contract PuzzleProxy is TransparentUpgradeableProxy {
         require(pendingAdmin == _expectedAdmin, "Expected new admin by the current admin is not the pending admin");
         admin = pendingAdmin;
     }
-
-    function upgradeTo(address _newImplementation) external onlyAdmin {
-        _upgradeTo(_newImplementation);
-    }
 }
 
 contract PuzzleWallet {

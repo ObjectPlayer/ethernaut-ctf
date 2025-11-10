@@ -30,6 +30,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-22-dex/`: Dex challenge contracts
   - `level-23-dex2/`: DexTwo challenge contracts
   - `level-24-puzzle-wallet/`: Puzzle Wallet challenge contracts
+  - `level-25-motorbike/`: Motorbike challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -77,6 +78,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `231-deploy-dex-two-solution.ts`: Deploys the DexTwoExploit solution contract
   - `240-deploy-puzzle-wallet.ts`: Deploys the Level 24 PuzzleWallet proxy and implementation
   - `241-deploy-puzzle-wallet-solution.ts`: Deploys the PuzzleWalletExploit solution contract
+  - `250-deploy-motorbike.ts`: Deploys the Level 25 Motorbike proxy and Engine implementation
+  - `251-deploy-motorbike-solution.ts`: Deploys the MotorbikeExploit solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -103,6 +106,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-22-dex/`: Scripts for the Dex challenge
   - `level-23-dex2/`: Scripts for the DexTwo challenge
   - `level-24-puzzle-wallet/`: Scripts for the Puzzle Wallet challenge
+  - `level-25-motorbike/`: Scripts for the Motorbike challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -132,6 +136,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-22-dex.md`: Documentation for the Dex challenge
   - `level-23-dex-two.md`: Documentation for the DexTwo challenge
   - `level-24-puzzle-wallet.md`: Documentation for the Puzzle Wallet challenge
+  - `level-25-motorbike.md`: Documentation for the Motorbike challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -237,6 +242,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 22: DEX](./docs/level-22-dex.md)
 - [Level 23: DexTwo](./docs/level-23-dex-two.md)
 - [Level 24: Puzzle Wallet](./docs/level-24-puzzle-wallet.md)
+- [Level 25: Motorbike](./docs/level-25-motorbike.md)
 
 ## Challenge Summaries
 
