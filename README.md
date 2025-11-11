@@ -33,6 +33,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-25-motorbike/`: Motorbike challenge contracts
   - `level-26-double-entry-point/`: Double Entry Point challenge contracts
   - `level-27-good-samaritan/`: Good Samaritan challenge contracts
+  - `level-28-gatekeeper3/`: Gatekeeper Three challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -86,6 +87,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `261-deploy-double-entry-point-solution.ts`: Deploys the DoubleEntryPointSolution solution contract
   - `270-deploy-good-samaritan.ts`: Deploys the Level 27 GoodSamaritan contract
   - `271-deploy-good-samaritan-solution.ts`: Deploys the GoodSamaritanAttack solution contract
+  - `280-deploy-gatekeeper-three.ts`: Deploys the Level 28 GatekeeperThree contract
+  - `281-deploy-gatekeeper-three-solution.ts`: Deploys the GatekeeperThreeAttack solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -115,6 +118,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-25-motorbike/`: Scripts for the Motorbike challenge
   - `level-26-double-entry-point/`: Scripts for the DoubleEntryPoint challenge
   - `level-27-good-samaritan/`: Scripts for the Good Samaritan challenge
+  - `level-28-gatekeeper-three/`: Scripts for the Gatekeeper Three challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -147,6 +151,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-25-motorbike.md`: Documentation for the Motorbike challenge
   - `level-26-double-entry-point.md`: Documentation for the DoubleEntryPoint challenge
   - `level-27-good-samaritan.md`: Documentation for the Good Samaritan challenge
+  - `level-28-gatekeeper-three.md`: Documentation for the Gatekeeper Three challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -255,6 +260,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 25: Motorbike](./docs/level-25-motorbike.md)
 - [Level 26: DoubleEntryPoint](./docs/level-26-double-entry-point.md)
 - [Level 27: Good Samaritan](./docs/level-27-good-samaritan.md)
+- [Level 28: Gatekeeper Three](./docs/level-28-gatekeeper-three.md)
 
 ## Challenge Summaries
 
@@ -402,6 +408,10 @@ The DoubleEntryPoint challenge requires protecting a CryptoVault from being drai
 ### Good Samaritan Challenge Summary
 
 The Good Samaritan challenge requires draining all coins from a charitable wallet. The vulnerability lies in the error handling logic that catches `NotEnoughBalance()` errors and transfers all remaining funds. The GoodSamaritan tries to donate 10 coins, but if it catches a `NotEnoughBalance()` error, it assumes the wallet is empty and sends everything. Our exploit implements the `INotifyable` interface with a `notify()` callback that reverts with a fake `NotEnoughBalance()` error when receiving 10 coins, tricking the contract into transferring all 1,000,000 coins instead. This challenge demonstrates the risks of using custom error handling for control flow and trusting errors from external contracts.
+
+### Gatekeeper Three Challenge Summary
+
+The Gatekeeper Three challenge requires passing three gates to become the entrant. The vulnerabilities include: (1) A critical typo - `construct0r()` instead of `constructor()` - making it a callable public function that anyone can use to become owner, (2) Gate Two requires reading a "private" password from SimpleTrick's storage (slot 2), demonstrating that private storage variables are still publicly readable, (3) Gate Three requires the contract balance to be > 0.001 ETH and `owner.send()` to fail, which we achieve by making our attack contract the owner and reverting in its receive function. This challenge teaches about constructor naming vulnerabilities, storage visibility, low-level call return values, and the difference between msg.sender and tx.origin.
 
 ## Other Useful Commands
 
