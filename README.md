@@ -35,6 +35,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-27-good-samaritan/`: Good Samaritan challenge contracts
   - `level-28-gatekeeper3/`: Gatekeeper Three challenge contracts
   - `level-29-switch/`: Switch challenge contracts
+  - `level-30-higher-order/`: HigherOrder challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -92,6 +93,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `281-deploy-gatekeeper-three-solution.ts`: Deploys the GatekeeperThreeAttack solution contract
   - `290-deploy-switch.ts`: Deploys the Level 29 Switch contract
   - `291-deploy-switch-solution.ts`: Deploys the SwitchAttack solution contract
+  - `300-deploy-higher-order.ts`: Deploys the Level 30 HigherOrder contract
+  - `301-deploy-higher-order-solution.ts`: Deploys the HigherOrderAttack solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -123,6 +126,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-27-good-samaritan/`: Scripts for the Good Samaritan challenge
   - `level-28-gatekeeper-three/`: Scripts for the Gatekeeper Three challenge
   - `level-29-switch/`: Scripts for the Switch challenge
+  - `level-30-higher-order/`: Scripts for the HigherOrder challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -157,6 +161,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-27-good-samaritan.md`: Documentation for the Good Samaritan challenge
   - `level-28-gatekeeper-three.md`: Documentation for the Gatekeeper Three challenge
   - `level-29-switch.md`: Documentation for the Switch challenge
+  - `level-30-higher-order.md`: Documentation for the HigherOrder challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -267,6 +272,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 27: Good Samaritan](./docs/level-27-good-samaritan.md)
 - [Level 28: Gatekeeper Three](./docs/level-28-gatekeeper-three.md)
 - [Level 29: Switch](./docs/level-29-switch.md)
+- [Level 30: HigherOrder](./docs/level-30-higher-order.md)
 
 ## Challenge Summaries
 
@@ -422,6 +428,10 @@ The Gatekeeper Three challenge requires passing three gates to become the entran
 ### Switch Challenge Summary
 
 The Switch challenge requires flipping a switch to the "on" position by exploiting calldata manipulation. The contract has an `onlyOff` modifier that checks position 68 in calldata for the `turnSwitchOff()` selector, assuming standard ABI encoding. However, by manipulating the offset parameter in our calldata, we can place `turnSwitchOff()` at position 68 (to pass the check) while the actual data being called is `turnSwitchOn()` at position 96. This exploit works because the modifier uses a hardcoded position without validating the complete calldata structure. The challenge demonstrates the dangers of hardcoded calldata positions, the importance of understanding ABI encoding, and why assembly operations that bypass Solidity's type system can be risky.
+
+### HigherOrder Challenge Summary
+
+The HigherOrder challenge requires exploiting a vulnerability in a higher-order function that allows us to claim ownership of the contract. The vulnerability lies in the `claimOwnership()` function, which calls `callback()` with the `msg.sender` as an argument. By providing a callback function that returns the `msg.sender`, we can claim ownership of the contract.
 
 ## Other Useful Commands
 
