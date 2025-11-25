@@ -36,6 +36,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-28-gatekeeper3/`: Gatekeeper Three challenge contracts
   - `level-29-switch/`: Switch challenge contracts
   - `level-30-higher-order/`: HigherOrder challenge contracts
+  - `level-31-stake/`: Stake challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -95,6 +96,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `291-deploy-switch-solution.ts`: Deploys the SwitchAttack solution contract
   - `300-deploy-higher-order.ts`: Deploys the Level 30 HigherOrder contract
   - `301-deploy-higher-order-solution.ts`: Deploys the HigherOrderAttack solution contract
+  - `310-deploy-stake.ts`: Deploys the Level 31 Stake and WETH contracts
+  - `311-deploy-stake-solution.ts`: Deploys the StakeAttack solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -127,6 +130,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-28-gatekeeper-three/`: Scripts for the Gatekeeper Three challenge
   - `level-29-switch/`: Scripts for the Switch challenge
   - `level-30-higher-order/`: Scripts for the HigherOrder challenge
+  - `level-31-stake/`: Scripts for the Stake challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -162,6 +166,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-28-gatekeeper-three.md`: Documentation for the Gatekeeper Three challenge
   - `level-29-switch.md`: Documentation for the Switch challenge
   - `level-30-higher-order.md`: Documentation for the HigherOrder challenge
+  - `level-31-stake.md`: Documentation for the Stake challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -273,6 +278,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 28: Gatekeeper Three](./docs/level-28-gatekeeper-three.md)
 - [Level 29: Switch](./docs/level-29-switch.md)
 - [Level 30: HigherOrder](./docs/level-30-higher-order.md)
+- [Level 31: Stake](./docs/level-31-stake.md)
 
 ## Challenge Summaries
 
@@ -431,7 +437,11 @@ The Switch challenge requires flipping a switch to the "on" position by exploiti
 
 ### HigherOrder Challenge Summary
 
-The HigherOrder challenge requires exploiting a vulnerability in a higher-order function that allows us to claim ownership of the contract. The vulnerability lies in the `claimOwnership()` function, which calls `callback()` with the `msg.sender` as an argument. By providing a callback function that returns the `msg.sender`, we can claim ownership of the contract.
+The HigherOrder challenge requires becoming the Commander by setting the treasury value to greater than 255. The vulnerability lies in a type mismatch between the function signature and assembly implementation. The `registerTreasury(uint8)` function signature suggests values are limited to 0-255, but the assembly code uses `calldataload(4)` which reads a full 32 bytes (uint256). By crafting raw calldata with a value > 255 and making a low-level call, we bypass ABI encoding and type checking. The assembly reads all 32 bytes and stores it in the treasury, allowing us to set treasury = 256 and claim leadership. This demonstrates how assembly operations bypass Solidity's type safety and why function signatures must match their implementations.
+
+### Stake Challenge Summary
+
+The Stake challenge requires draining the contract while meeting specific conditions: contract balance > 0, totalStaked > balance, you're a staker, and your stake = 0. The vulnerability is an accounting mismatch between ETH and WETH staking. The `StakeWETH()` function receives WETH tokens (ERC20) and increases `totalStaked`, but doesn't add to the contract's ETH balance. Meanwhile, `Unstake()` always sends native ETH regardless of what was staked. By staking WETH (increases totalStaked, no ETH added), then staking ETH (both increase), then unstaking everything (drains ETH), we create a mismatch where totalStaked > ETH balance. This teaches the critical lesson that different asset types must have separate accounting, and withdrawal logic must match what was deposited.
 
 ## Other Useful Commands
 
