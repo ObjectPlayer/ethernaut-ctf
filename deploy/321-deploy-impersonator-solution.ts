@@ -34,6 +34,22 @@ const deployImpersonatorSolution: DeployFunction = async function (hre: HardhatR
     } else {
       throw new Error("Please provide LOCKER_ADDRESS environment variable or deploy the instance contract first");
     }
+  } else {
+    // Check if provided address is Impersonator factory or ECLocker
+    // Try to call lockers(0) - if it works, it's the factory
+    try {
+      const possibleFactory = await ethers.getContractAt("Impersonator", lockerAddress);
+      const ecLockerAddress = await possibleFactory.lockers(0);
+      if (ecLockerAddress && ecLockerAddress !== ethers.ZeroAddress) {
+        console.log(`Provided address is Impersonator factory, fetching ECLocker...`);
+        console.log(`  Factory: ${lockerAddress}`);
+        lockerAddress = ecLockerAddress;
+        console.log(`  ECLocker: ${lockerAddress}`);
+      }
+    } catch {
+      // Not a factory, assume it's the ECLocker directly
+      console.log(`Using provided address as ECLocker: ${lockerAddress}`);
+    }
   }
 
   // Deploy the ImpersonatorAttack contract
@@ -48,13 +64,20 @@ const deployImpersonatorSolution: DeployFunction = async function (hre: HardhatR
   console.log("ImpersonatorAttack deployed to:", attackContract.address);
   console.log("  Target ECLocker:", lockerAddress);
 
-  // Get contract instances to display current state
-  const lockerContract = await ethers.getContractAt("ECLocker", lockerAddress!);
-  const attackContractInstance = await ethers.getContractAt("ImpersonatorAttack", attackContract.address);
+  // Get contract instances to display current state (wrapped in try-catch for external networks)
+  let controller = "Unknown";
+  let msgHash = "Unknown";
+  let lockId = "Unknown";
   
-  const controller = await lockerContract.controller();
-  const msgHash = await lockerContract.msgHash();
-  const lockId = await lockerContract.lockId();
+  try {
+    const lockerContract = await ethers.getContractAt("ECLocker", lockerAddress!);
+    controller = await lockerContract.controller();
+    msgHash = await lockerContract.msgHash();
+    lockId = (await lockerContract.lockId()).toString();
+  } catch (error: any) {
+    console.log("\n⚠️  Could not query ECLocker state (may be on external network)");
+    console.log("    You can query the state manually using the attack script.");
+  }
 
   console.log("\n=== Current State ===");
   console.log(`ECLocker Address: ${lockerAddress}`);
