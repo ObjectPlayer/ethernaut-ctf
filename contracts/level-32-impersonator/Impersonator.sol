@@ -10,7 +10,7 @@ contract Impersonator is Ownable {
 
     event NewLock(address indexed lockAddress, uint256 lockId, uint256 timestamp, bytes signature);
 
-    constructor(uint256 _lockCounter) {
+    constructor(uint256 _lockCounter) Ownable(msg.sender) {
         lockCounter = _lockCounter;
     }
 
