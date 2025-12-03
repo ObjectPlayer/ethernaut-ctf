@@ -38,6 +38,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-30-higher-order/`: HigherOrder challenge contracts
   - `level-31-stake/`: Stake challenge contracts
   - `level-32-impersonator/`: Impersonator challenge contracts
+  - `level-33-magic-animal/`: Magic Animal Carousel challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -101,6 +102,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `311-deploy-stake-solution.ts`: Deploys the StakeAttack solution contract
   - `320-deploy-impersonator.ts`: Deploys the Level 32 Impersonator and ECLocker contracts
   - `321-deploy-impersonator-solution.ts`: Deploys the ImpersonatorAttack solution contract
+  - `330-deploy-magic-animal-carousel.ts`: Deploys the Level 33 MagicAnimalCarousel contract
+  - `331-deploy-magic-animal-carousel-solution.ts`: Deploys the MagicAnimalCarouselAttack solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -135,6 +138,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-30-higher-order/`: Scripts for the HigherOrder challenge
   - `level-31-stake/`: Scripts for the Stake challenge
   - `level-32-impersonator/`: Scripts for the Impersonator challenge
+  - `level-33-magic-animal-carousel/`: Scripts for the Magic Animal Carousel challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -172,6 +176,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-30-higher-order.md`: Documentation for the HigherOrder challenge
   - `level-31-stake.md`: Documentation for the Stake challenge
   - `level-32-impersonator.md`: Documentation for the Impersonator challenge
+  - `level-33-magic-animal-carousel.md`: Documentation for the Magic Animal Carousel challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -285,6 +290,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 30: HigherOrder](./docs/level-30-higher-order.md)
 - [Level 31: Stake](./docs/level-31-stake.md)
 - [Level 32: Impersonator](./docs/level-32-impersonator.md)
+- [Level 33: Magic Animal Carousel](./docs/level-33-magic-animal-carousel.md)
 
 ## Challenge Summaries
 
@@ -452,6 +458,10 @@ The Stake challenge requires draining the contract while meeting specific condit
 ### Impersonator Challenge Summary
 
 The Impersonator challenge requires opening an ECLocker door without being the authorized controller. The vulnerability lies in ECDSA signature malleability. For any valid ECDSA signature `(v, r, s)`, there exists a malleable signature `(v', r, n-s)` where `v' = v XOR 1` and `n` is the secp256k1 curve order. Both signatures recover to the same address! The ECLocker tracks used signatures by hashing `(r, s, v)`, but since the malleable signature has different `s` and `v` values, it has a different hash and bypasses the replay protection. The solution computes the malleable signature from the original one used during initialization and calls `open()` with it. This teaches the importance of using normalized signatures (requiring `s` to be in the lower half of the curve) or using audited libraries like OpenZeppelin's ECDSA which handles this automatically.
+
+### Magic Animal Carousel Challenge Summary
+
+The Magic Animal Carousel challenge requires breaking the rule that "the same animal must be there" after joining the carousel. Multiple vulnerabilities exist: (1) An operator precedence bug where `a << 160 + 16` evaluates as `(a << 160) + 16` instead of `a << 176`, causing animal bits to overlap with the nextId field, (2) An encoding inconsistency where `setAnimalAndSpin` applies an extra `>> 16` shift that `changeAnimal` doesn't, resulting in different encodings for the same animal name, (3) An owner bypass where calling `changeAnimal("", crateId)` clears the owner, allowing anyone to subsequently modify the animal, and (4) NextId manipulation where 12-character animal names can corrupt the carousel's nextId pointer via OR operations. The solution exploits the owner bypass: add an animal, clear the owner with an empty string, then change the animal. This teaches the importance of operator precedence awareness (always use parentheses!), consistent encoding across functions, and complete access control that doesn't allow unauthorized ownership clearing.
 
 ## Other Useful Commands
 
