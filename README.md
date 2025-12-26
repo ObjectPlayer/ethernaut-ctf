@@ -40,6 +40,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-32-impersonator/`: Impersonator challenge contracts
   - `level-33-magic-animal/`: Magic Animal Carousel challenge contracts
   - `level-34-bet-house/`: Bet House challenge contracts
+  - `level-35-elliptic-token/`: Elliptic Token challenge contracts
 - `deploy/`: Contains deployment scripts using hardhat-deploy with proper tagging and dependencies
   - `01-deploy-hello-ethernaut.ts`: Deploys the Level 0 Hello Ethernaut contract
   - `10-deploy-fallback.ts`: Deploys the Level 1 Fallback contract
@@ -107,6 +108,8 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `331-deploy-magic-animal-carousel-solution.ts`: Deploys the MagicAnimalCarouselAttack solution contract
   - `340-deploy-bet-house.ts`: Deploys the Level 34 BetHouse, Pool, and PoolToken contracts
   - `341-deploy-bet-house-solution.ts`: Deploys the BetHouseAttack solution contract
+  - `350-deploy-elliptic-token.ts`: Deploys the Level 35 EllipticToken contract
+  - `351-deploy-elliptic-token-solution.ts`: Deploys the EllipticTokenAttack solution contract
 - `scripts/`: Contains scripts for interacting with deployed contracts and utilities
   - `level-00-hello/`: Scripts for the Hello Ethernaut challenge
   - `level-01-fallback/`: Scripts for the Fallback challenge
@@ -143,6 +146,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-32-impersonator/`: Scripts for the Impersonator challenge
   - `level-33-magic-animal-carousel/`: Scripts for the Magic Animal Carousel challenge
   - `level-34-bet-house/`: Scripts for the Bet House challenge
+  - `level-35-elliptic-token/`: Scripts for the Elliptic Token challenge
   - `verify.ts`: Utility for manually verifying contracts on block explorers
 - `utils/`: Contains utility functions and configurations
   - `network-config.ts`: Network configuration for automatic contract verification
@@ -182,6 +186,7 @@ This project contains solutions for the [Ethernaut](https://ethernaut.openzeppel
   - `level-32-impersonator.md`: Documentation for the Impersonator challenge
   - `level-33-magic-animal-carousel.md`: Documentation for the Magic Animal Carousel challenge
   - `level-34-bet-house.md`: Documentation for the Bet House challenge
+  - `level-35-elliptic-token.md`: Documentation for the Elliptic Token challenge
 - `test/`: Contains test suites for verifying contract functionality
 
 ## Getting Started
@@ -297,6 +302,7 @@ Detailed documentation for each challenge is available in the `docs/` directory:
 - [Level 32: Impersonator](./docs/level-32-impersonator.md)
 - [Level 33: Magic Animal Carousel](./docs/level-33-magic-animal-carousel.md)
 - [Level 34: Bet House](./docs/level-34-bet-house.md)
+- [Level 35: Elliptic Token](./docs/level-35-elliptic-token.md)
 
 ## Challenge Summaries
 
@@ -472,6 +478,10 @@ The Magic Animal Carousel challenge requires breaking the rule that "the same an
 ### Bet House Challenge Summary
 
 The Bet House challenge requires becoming a bettor with only 5 PDT (Pool Deposit Tokens) when 20 wrapped tokens are required. The vulnerability is a cross-function reentrancy in Pool's `withdrawAll()` function. While the function uses `nonReentrant` modifier, it burns wrapped tokens AFTER the external ETH transfer via `.call()`. During the ETH callback, the attacker still has their wrapped token balance intact and can: (1) Re-deposit the returned PDT to increase their balance to 20 tokens, (2) Lock their deposits, and (3) Call `makeBet()` to become a bettor. After the callback returns, the tokens are burned, but the bettor status persists. This teaches that `nonReentrant` only protects against calling the same function again - other functions can still be called during reentrancy. The fix is to follow the checks-effects-interactions pattern and burn tokens BEFORE any external calls.
+
+### Elliptic Token Challenge Summary
+
+The Elliptic Token challenge requires stealing tokens from ALICE by exploiting a domain confusion vulnerability in ECDSA signature verification. The `permit()` function uses `bytes32(amount)` directly as the ECDSA message instead of properly hashing it. This allows ALICE's signature from `redeemVoucher()` (which signs `voucherHash`) to be reused in `permit()` by setting `amount = uint256(voucherHash)`. Since `bytes32(amount) == voucherHash`, ALICE's voucher signature verifies as a permit signature, granting the attacker approval to spend ALICE's tokens. This teaches the critical importance of: (1) Always hashing messages before ECDSA signing, (2) Using domain separation to prevent cross-context signature reuse, and (3) Following standards like EIP-712 for structured signatures.
 
 ## Other Useful Commands
 
